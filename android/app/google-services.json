@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "223853342688",
+    "project_id": "fundonotes-cf000",
+    "storage_bucket": "fundonotes-cf000.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:223853342688:android:72a4395a0b825992fdc585",
+        "android_client_info": {
+          "package_name": "com.fundonote"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "223853342688-te0dkmtpjgsr8upj3su5j799aa8m7esv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSK2dDc0QX_SxwORVI7c464Lgi7DX_GR4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "223853342688-te0dkmtpjgsr8upj3su5j799aa8m7esv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
