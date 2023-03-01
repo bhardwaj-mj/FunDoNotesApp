@@ -1,5 +1,5 @@
-import React from 'react';
-
+import React, {useEffect} from 'react';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import Login from '../screens/Login';
@@ -10,6 +10,12 @@ import 'react-native-gesture-handler';
 const Stack = createStackNavigator();
 
 const AuthStack = () => {
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId:
+        '223853342688-te0dkmtpjgsr8upj3su5j799aa8m7esv.apps.googleusercontent.com',
+    });
+  }, []);
   return (
     <Stack.Navigator initialRouteName="Login">
       <Stack.Screen

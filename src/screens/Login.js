@@ -9,30 +9,53 @@ import {
 } from 'react-native';
 import {styles} from '../utility/GlobalStyle';
 import {AuthContext} from '../navigation/AuthProvider';
+
 const Login = ({navigation}) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-  const [checkValidEmail, setCheckValidEmail] = useState('');
-  const [checkValidPassword, setCheckValidPassword] = useState('');
-  const {userLogin} = useContext(AuthContext);
-  const handleCheckEmail = text => {
-    let regexMail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    setEmail(text);
-
-    if (regexMail.test(text)) {
-      setCheckValidEmail(false);
-    } else {
-      setCheckValidEmail(true);
+  const [errors, setErrors] = useState('');
+  const {userLogin, googleLogin} = useContext(AuthContext);
+  const validate = () => {
+    let emailRegex = /^[\w-\\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+    let passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+    let valid = true;
+    const temp = {};
+    if (!emailRegex.test(email)) {
+      valid = false;
+      temp.mail = 'Please enter valid email';
     }
+    if (email === '') {
+      valid = false;
+      temp.mail = "Email field shouldn't be empty";
+    }
+    if (email === 'auth/user-not-found') {
+      temp.mail = 'User not found';
+    }
+    if (!passwordRegex.test(password)) {
+      valid = false;
+      temp.pass =
+        'Password must have a minimum of 8 characters and contain at least one upper case letter, one lower case letter, one number, and one special character';
+    }
+    if (password === '') {
+      valid = false;
+      temp.pass = "Password field shouldn't be empty";
+    }
+    setErrors(temp);
+    return valid;
   };
-  const handleCheckPassword = text => {
-    let regexPassword = /^[a-zA-Z0-9!@#$%^&*]{6,16}$/;
-    setPassword(text);
-
-    if (regexPassword.test(text)) {
-      setCheckValidPassword(false);
-    } else {
-      setCheckValidPassword(true);
+  const setErrorMeassage = error => {
+    const temp = {};
+    if (error === 'auth/user-not-found') {
+      temp.mail = 'User not found';
+    }
+    if (error === 'auth/wrong-password') {
+      temp.pass = 'Invalid password';
+    }
+    setErrors(temp);
+  };
+  const onSubmit = () => {
+    if (validate()) {
+      userLogin(email, password, setErrorMeassage);
     }
   };
 
@@ -48,40 +71,29 @@ const Login = ({navigation}) => {
         <View>
           <ScrollView>
             <TextInput
-              label="Email"
-              onChangeText={text => handleCheckEmail(text)}
+              labelValue={email}
+              onChangeText={userEmail => setEmail(userEmail)}
               style={styles.textInput}
               placeholder="Email"
             />
-            {checkValidEmail ? (
-              <Text style={{color: 'red', marginLeft: 17}}>
-                Please enter a valid E-mail
-              </Text>
-            ) : (
-              <Text />
-            )}
-
+            <View>
+              <Text style={{color: 'red', marginLeft: 20}}>{errors.mail}</Text>
+            </View>
             <TextInput
-              label="Password"
-              onChangeText={text => handleCheckPassword(text)}
+              labelValue={password}
+              onChangeText={userPassword => setPassword(userPassword)}
               style={styles.textInput}
               placeholder="Password"
             />
-            {checkValidPassword ? (
-              <Text style={{color: 'red', marginLeft: 17}}>
-                Please enter a valid password
-              </Text>
-            ) : (
-              <Text />
-            )}
+            <View>
+              <Text style={{color: 'red', marginLeft: 20}}>{errors.pass}</Text>
+            </View>
             <TouchableOpacity
               style={styles.TextButton}
               onPress={() => navigation.navigate('Forgot Password')}>
               <Text style={styles.buttonText1}>Forgot Password?</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => userLogin(email, password)}>
+            <TouchableOpacity style={styles.button} onPress={() => onSubmit()}>
               <Text style={styles.buttonText}>Sign In</Text>
             </TouchableOpacity>
 
@@ -91,6 +103,11 @@ const Login = ({navigation}) => {
               <Text style={styles.buttonText1}>
                 Don't have an account? Sign up
               </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => googleLogin()}>
+              <Text style={styles.buttonText}>SignIn With Google</Text>
             </TouchableOpacity>
           </ScrollView>
         </View>

@@ -1,5 +1,5 @@
 apply plugin: "com.android.application"
-apply plugin: "com.google.gms.google-services"
+
 import com.android.build.OutputFile
 import org.apache.tools.ant.taskdefs.condition.Os
 
@@ -83,6 +83,7 @@ project.ext.react = [
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
 
 /**
  * Set this to true to create two separate APKs instead of one:
@@ -133,6 +134,8 @@ android {
     ndkVersion rootProject.ext.ndkVersion
 
     compileSdkVersion rootProject.ext.compileSdkVersion
+    compileSdkVersion 27
+    buildToolsVersion "27.0.3"
 
     defaultConfig {
         applicationId "com.fundonote"
@@ -159,6 +162,8 @@ android {
                 }
             }
         }
+        vectorDrawables.useSupportLibrary = true
+         targetSdkVersion 27
     }
 
     if (isNewArchitectureEnabled()) {
@@ -214,7 +219,7 @@ android {
         debug {
             storeFile file('debug.keystore')
             storePassword 'android'
-            keyAlias 'androiddebugkey'
+            keyAlias 'my-key-alias'
             keyPassword 'android'
         }
     }
@@ -312,3 +317,4 @@ def isNewArchitectureEnabled() {
     // - Set an environment variable `ORG_GRADLE_PROJECT_newArchEnabled=true`
     return project.hasProperty("newArchEnabled") && project.newArchEnabled == "true"
 }
+apply plugin: "com.google.gms.google-services"

@@ -4,6 +4,7 @@ import auth from '@react-native-firebase/auth';
 import {AuthContext} from './AuthProvider';
 import AuthStack from './AuthStack';
 import AppStack from './AppStack';
+import OpeningScreen from '../screens/OpeningScreen';
 const Routes = () => {
   const {user, setUser} = useContext(AuthContext);
   const [initializing, setInitializing] = useState(true);
@@ -18,7 +19,7 @@ const Routes = () => {
     return subscriber;
   }, []);
   if (initializing) {
-    return null;
+    return <OpeningScreen />;
   }
   return (
     <NavigationContainer>

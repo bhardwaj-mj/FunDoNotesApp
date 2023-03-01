@@ -2,6 +2,11 @@ import {StyleSheet} from 'react-native';
 import {Color, Padding, Border, Font} from './Theme';
 
 export const styles = StyleSheet.create({
+  openingScreen: {
+    flex: 1,
+    backgroundColor: Color.PRIMARY,
+    justifyContent: 'center',
+  },
   display: {
     flex: 1,
     backgroundColor: Color.PRIMARY,
