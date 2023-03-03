@@ -10,30 +10,22 @@ const CustomModal = props => {
       onRequestClose={props.onRequestClose}
       hardwareAccelerated>
       <View style={{backgroundColor: '#000000aa', flex: 1}}>
-        <View style={styles.modalView}>
-          <TouchableOpacity
-            style={styles.avatar}
-            onPress={() => props.hideModal()}>
-            <Avatar
-              rounded
-              size="large"
-              source={{
-                uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-              }}
-            />
-          </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.modalView}
+          onPress={() => props.hideModal()}>
           <TouchableOpacity
             style={styles.avatar}
             onPress={props.onPressEditImage}>
-            <Text>Edit Image</Text>
+            <Avatar rounded size="medium" source={props.source} />
           </TouchableOpacity>
+
           <Text style={styles.userText}>{props.fullName}</Text>
           <TouchableOpacity
             style={styles.logoutButton}
             onPress={props.onPressLogout}>
             <Text style={styles.logoutText}>Logout</Text>
           </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
       </View>
     </Modal>
   );

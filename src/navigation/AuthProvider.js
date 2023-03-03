@@ -23,14 +23,20 @@ export const AuthProvider = ({children}) => {
             errorCallBack(e.code);
           }
         },
-        userRegistration: async (email, password, errorCallBack, fullName) => {
+        userRegistration: async (
+          email,
+          password,
+          errorCallBack,
+          fullName,
+          photo,
+        ) => {
           try {
             const userDetails = await auth().createUserWithEmailAndPassword(
               email,
               password,
             );
 
-            addUserData(email, fullName, userDetails.user.uid);
+            addUserData(email, fullName, photo, userDetails.user.uid);
           } catch (e) {
             console.log(e);
             errorCallBack(e.code);

@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, TouchableOpacity, Modal, StyleSheet} from 'react-native';
+import {Text, View, TouchableOpacity, Modal, StyleSheet} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
@@ -17,13 +17,17 @@ const ImagePickerModal = props => {
           activeOpacity={1}
           onPress={() => props.hideModal()}>
           <View style={styles.modal_container}>
-            <TouchableOpacity style={styles.modalBtn}>
-              <Ionicons name="camera" size={25} color="white" />
+            <TouchableOpacity
+              style={styles.modalBtn}
+              onPress={props.onPressOpenCamera}>
+              <Text style={styles.text}>Camera</Text>
+              <Ionicons name="camera" size={40} color="white" />
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.modalBtn}
-              onPress={props.onPressOpenGalary()}>
-              <FontAwesome name="photo" size={25} color="white" />
+              onPress={props.onPressOpenGalary}>
+              <Text style={styles.text}>Galary</Text>
+              <FontAwesome name="photo" size={40} color="white" />
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
@@ -36,25 +40,27 @@ export default ImagePickerModal;
 
 const styles = StyleSheet.create({
   modal_container: {
-    width: 50,
-    height: 80,
-    backgroundColor: 'white',
-    borderWidth: 1,
-    borderColor: '#555',
-    borderRadius: 20,
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: 'skyblue',
+    borderTopRightRadius: 20,
+    borderTopLeftRadius: 20,
+    flexDirection: 'row',
   },
   modalBtn: {
     backgroundColor: 'skyblue',
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor: '#555',
-    borderWidth: 1,
-    borderRadius: 10,
-    margin: 5,
+    margin: 40,
   },
   button: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+  },
+  text: {
+    color: 'white',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
 });

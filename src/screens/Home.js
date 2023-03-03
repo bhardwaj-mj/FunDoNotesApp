@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
+  PermissionsAndroid,
   Alert,
 } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
@@ -14,45 +15,70 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import {AuthContext} from '../navigation/AuthProvider';
 import CustomModal from '../components/CustomModal';
-import {fetchUserData} from '../services/UserServices';
+import {fetchUserData, updateUserData} from '../services/UserServices';
 import ImagePickerModal from '../components/ImagePickerModal';
-import ImagePicker from 'react-native-image-crop-picker';
 import storage from '@react-native-firebase/storage';
+import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import Notes from '../components/Notes';
 
 const Home = ({navigation}) => {
   const {user, userLogout} = useContext(AuthContext);
   const [modalVisible, setModalVisible] = useState(false);
   const [fullName, setFullName] = useState();
   const [imageModalVisible, setImageModalVisible] = useState(false);
-  const [imageFile, setImageFile] = useState('');
+  const [image, setImage] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
 
   const onPressHandler = () => {
     navigation.openDrawer();
   };
   const uploadImage = async img => {
-    const uri = img;
-    const filename = uri.substring(uri.lastIndexOf('/') + 1);
-    const uploadUri = uri;
-    console.log(filename);
-    const reference = storage().ref(filename);
+    const uploadUri = img;
+    const fileName = uploadUri.substring(uploadUri.lastIndexOf('/') + 1);
 
     try {
-      await reference.putFile(uploadUri);
-      const url = await storage().ref(filename).getDownloadURL();
-      setImageFile(url);
+      await storage().ref(fileName).putFile(uploadUri);
+
+      const url = await storage().ref(fileName).getDownloadURL();
+      setImageUrl(url);
+      console.log(imageUrl);
+      updateUserData(user, url);
       Alert.alert(
-        'Photo uploaded!',
-        'Your photo has been uploaded to Firebase Cloud Storage!',
+        'Image uploaded!',
+        'Your image has been uploaded to the Firebase cloud Storage successfully!',
       );
     } catch (e) {
-      console.error(e);
+      console.log(e);
     }
+  };
+  let options = {
+    saveToPhotos: true,
+    mediaType: 'photo',
+    maxWidth: 300,
+    maxHeight: 400,
+  };
+  const openCamera = async () => {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.CAMERA,
+    );
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      const result = await launchCamera(options);
+      console.log(result);
+      uploadImage(result.assets[0].uri);
+    }
+  };
+  const openGalary = async () => {
+    const result = await launchImageLibrary(options);
+    console.log(result);
+    uploadImage(result.assets[0].uri);
   };
 
   const dataReceiver = async () => {
     try {
       const userdata = await fetchUserData(user);
       setFullName(userdata[0]);
+      setImage(userdata[1]);
+      console.log(userdata[1]);
     } catch (e) {
       console.log(e);
     }
@@ -64,22 +90,8 @@ const Home = ({navigation}) => {
     } catch (e) {
       console.log(e);
     }
-  }, []);
+  }, [uploadImage]);
 
-  const choosePhotoFromGalary = () => {
-    ImagePicker.openPicker({
-      width: 300,
-      height: 400,
-      cropping: true,
-    })
-      .then(image => {
-        console.log(image);
-        uploadImage(image.path);
-      })
-      .catch(e => {
-        console.log(e);
-      });
-  };
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
@@ -108,9 +120,13 @@ const Home = ({navigation}) => {
             <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
               <Avatar
                 rounded
-                source={{
-                  uri: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-                }}
+                source={
+                  image
+                    ? {uri: image}
+                    : {
+                        uri: 'https://t4.ftcdn.net/jpg/03/75/38/73/240_F_375387396_wSJM4Zm0kIRoG7Ej8rmkXot9gN69H4u4.jpg',
+                      }
+                }
               />
             </TouchableOpacity>
           </View>
@@ -125,6 +141,13 @@ const Home = ({navigation}) => {
                 onPressEditImage={() =>
                   setImageModalVisible(!imageModalVisible)
                 }
+                source={
+                  image
+                    ? {uri: image}
+                    : {
+                        uri: 'https://t4.ftcdn.net/jpg/03/75/38/73/240_F_375387396_wSJM4Zm0kIRoG7Ej8rmkXot9gN69H4u4.jpg',
+                      }
+                }
               />
             ) : null}
           </View>
@@ -134,9 +157,8 @@ const Home = ({navigation}) => {
                 visible={imageModalVisible}
                 onRequestClose={() => setImageModalVisible(false)}
                 hideModal={() => setImageModalVisible(false)}
-                onPressOpenGalary={() => {
-                  choosePhotoFromGalary();
-                }}
+                onPressOpenCamera={() => openCamera()}
+                onPressOpenGalary={() => openGalary()}
               />
             ) : null}
           </View>
@@ -145,7 +167,9 @@ const Home = ({navigation}) => {
       <View style={styles.secondFlexViewOne}>
         <ScrollView>
           <SafeAreaView>
-            <View></View>
+            <View>
+              <Notes />
+            </View>
           </SafeAreaView>
         </ScrollView>
       </View>
@@ -184,7 +208,10 @@ const Home = ({navigation}) => {
               <View style={styles.plusView}>
                 <TouchableOpacity
                   activeOpacity={0.1}
-                  style={styles.plusTouchable}>
+                  style={styles.plusTouchable}
+                  onPress={() => {
+                    navigation.navigate('CreateNote');
+                  }}>
                   <Feather
                     name="plus-square"
                     style={styles.plusIcon}
