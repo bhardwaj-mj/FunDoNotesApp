@@ -6,19 +6,34 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
+  Alert,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {AuthContext} from '../navigation/AuthProvider';
-import {addNoteData} from '../services/NoteServices';
+import {addNoteData, updateNoteData} from '../services/NoteServices';
+import CreateNoteBottomSheet from '../components/CreateNoteBottomSheet';
 
-const CreateNote = ({navigation}) => {
+const CreateNote = ({navigation, route}) => {
+  const noteData = route.params;
+
   const {user} = useContext(AuthContext);
-  const [title, setTitle] = useState('');
-  const [note, setNote] = useState('');
+  const [title, setTitle] = useState(noteData?.editData?.title || '');
+  const [note, setNote] = useState(noteData?.editData?.note || '');
+  const [pinned, setPinned] = useState(noteData?.editData?.pinned || false);
+  const [archived, setAchived] = useState(
+    noteData?.editData?.archived || false,
+  );
+  const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
+
+  const obtainedID = noteData?.noteId;
 
   const onPressBack = async () => {
-    await addNoteData(title, note, user.uid);
+    if (obtainedID) {
+      await updateNoteData(title, note, pinned, archived, user.uid, obtainedID);
+    } else {
+      await addNoteData(title, note, pinned, archived, user.uid);
+    }
     navigation.goBack();
   };
   return (
@@ -34,9 +49,13 @@ const CreateNote = ({navigation}) => {
             />
           </TouchableOpacity>
 
-          <TouchableOpacity style={{marginLeft: 200}}>
+          <TouchableOpacity
+            style={{marginLeft: 200}}
+            onPress={() => {
+              setPinned(!pinned);
+            }}>
             <MaterialCommunityIcons
-              name="pin-outline"
+              name={pinned ? 'pin' : 'pin-outline'}
               size={25}
               color="#87ceeb"
             />
@@ -49,7 +68,11 @@ const CreateNote = ({navigation}) => {
               style={{marginLeft: 20}}
             />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              setAchived(!archived);
+              Alert.alert('Note Archived');
+            }}>
             <MaterialCommunityIcons
               name="archive-arrow-down-outline"
               size={25}
@@ -118,13 +141,25 @@ const CreateNote = ({navigation}) => {
 
         <Text style={{fontSize: 20, color: '#87ceeb'}}>Edited </Text>
 
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            setBottomSheetVisible(!bottomSheetVisible);
+          }}>
           <MaterialCommunityIcons
             name="dots-vertical"
             color="#87ceeb"
             size={20}
           />
         </TouchableOpacity>
+      </View>
+      <View>
+        {bottomSheetVisible ? (
+          <CreateNoteBottomSheet
+            visible={bottomSheetVisible}
+            onRequestClose={() => setBottomSheetVisible(false)}
+            hideModal={() => setBottomSheetVisible(false)}
+          />
+        ) : null}
       </View>
     </View>
   );

@@ -9,9 +9,9 @@ export const fetchUserData = async user => {
     .collection('Users')
     .doc(user.uid)
     .get();
-  console.log(user.uid);
-  console.log(documentSnapshot.exists, 'Doc exist?');
-  console.log('User data: ', documentSnapshot.data());
+  // console.log(user.uid);
+  // console.log(documentSnapshot.exists, 'Doc exist?');
+  // console.log('User data: ', documentSnapshot.data());
   const name = documentSnapshot.data().name;
   const picture = documentSnapshot.data().photo;
   userData.push(name);

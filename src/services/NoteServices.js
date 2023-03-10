@@ -1,6 +1,6 @@
 import firestore from '@react-native-firebase/firestore';
 
-export const addNoteData = async (title, note, user) => {
+export const addNoteData = async (title, note, pinned, archived, user) => {
   try {
     await firestore()
       .collection('NoteDetails')
@@ -9,6 +9,8 @@ export const addNoteData = async (title, note, user) => {
       .add({
         title: title,
         note: note,
+        pinned: pinned,
+        archived: archived,
       });
 
     console.log('Note added!');
@@ -34,4 +36,24 @@ export const fetchNoteData = async user => {
   } catch (e) {
     console.log(e);
   }
+};
+export const updateNoteData = async (
+  title,
+  note,
+  pinned,
+  archived,
+  user,
+  ObtainedId,
+) => {
+  await firestore()
+    .collection('NoteDetails')
+    .doc(user)
+    .collection('Notes')
+    .doc(ObtainedId)
+    .update({
+      title: title,
+      note: note,
+      pinned: pinned,
+      archived: archived,
+    });
 };

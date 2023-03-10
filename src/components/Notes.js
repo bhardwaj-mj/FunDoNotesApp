@@ -1,45 +1,113 @@
 import React, {useState, useContext, useEffect} from 'react';
-import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
+import {Text, View, TouchableOpacity, StyleSheet, FlatList} from 'react-native';
 import {AuthContext} from '../navigation/AuthProvider';
 import {fetchNoteData} from '../services/NoteServices';
-const Notes = () => {
-  const [note, setNote] = useState('');
+import {useIsFocused} from '@react-navigation/native';
+import NoteCard from './NoteCard';
+
+const Notes = ({navigation}) => {
+  const [otherNotes, setOtherNotes] = useState([]);
+  const [pinnedNotes, setPinnedNotes] = useState([]);
   const {user} = useContext(AuthContext);
+  const isFocused = useIsFocused();
+
   const getNotesData = async () => {
     let notesData = await fetchNoteData(user.uid);
-    console.log(notesData);
-    let notesArray = [];
+
+    let pinned = [];
+    let others = [];
+
     notesData.forEach(item => {
-      notesArray.push(item);
+      if (item.pinned) {
+        pinned.push(item);
+      }
+      if (!item.pinned && !item.archived) {
+        others.push(item);
+      }
     });
-    setNote(notesArray);
-    //console.log(notesArray);
-    //console.log(note);
+    setPinnedNotes(pinned);
+    setOtherNotes(others);
   };
   useEffect(() => {
-    getNotesData();
-  }, []);
+    if (isFocused) {
+      getNotesData();
+    }
+  }, [isFocused]);
+
+  const editNotes = item => {
+    navigation.navigate('CreateNote', {
+      editData: item,
+      noteId: item.id,
+    });
+  };
+  const PinnedFlatList = () => {
+    return (
+      <View>
+        <Text style={styles.heading}>{pinnedNotes.length ? 'Pinned' : ''}</Text>
+        <FlatList
+          style={styles.list}
+          data={pinnedNotes}
+          ListFooterComponent={OthersFlatList}
+          renderItem={({item}) => (
+            <TouchableOpacity
+              style={styles.notesView}
+              onPress={() => {
+                editNotes(item);
+              }}>
+              <NoteCard {...item} />
+            </TouchableOpacity>
+          )}
+        />
+      </View>
+    );
+  };
+  const OthersFlatList = () => {
+    return (
+      <View>
+        <Text style={styles.heading}>{pinnedNotes.length ? 'Others' : ''}</Text>
+        <FlatList
+          data={otherNotes}
+          renderItem={({item}) => (
+            <TouchableOpacity
+              style={styles.notesView}
+              onPress={() => {
+                editNotes(item);
+              }}>
+              <NoteCard {...item} />
+            </TouchableOpacity>
+          )}
+        />
+      </View>
+    );
+  };
 
   return (
     <View>
-      {note.map(item => (
-        <TouchableOpacity style={styles.notesView}>
-          <Text style={styles.text}>{item.title}</Text>
-          <Text style={styles.text}>{item.note}</Text>
-        </TouchableOpacity>
-      ))}
+      <FlatList ListHeaderComponent={PinnedFlatList} />
     </View>
   );
 };
 const styles = StyleSheet.create({
+  list: {
+    paddingLeft: 10,
+    paddingRight: 10,
+  },
   notesView: {
     backgroundColor: 'white',
-    margin: 10,
+    margin: 7,
     borderColor: '#87ceeb',
     borderWidth: 1,
+    borderRadius: 10,
+    padding: 10,
+
+    justifyContent: 'space-between',
   },
-  text: {
+  heading: {
     color: '#87ceeb',
+    fontSize: 15,
+    fontWeight: 'bold',
+    marginLeft: 20,
+    marginTop: 15,
   },
 });
 export default Notes;

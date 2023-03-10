@@ -4,8 +4,6 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
-  ScrollView,
-  SafeAreaView,
   PermissionsAndroid,
   Alert,
 } from 'react-native';
@@ -27,7 +25,6 @@ const Home = ({navigation}) => {
   const [fullName, setFullName] = useState();
   const [imageModalVisible, setImageModalVisible] = useState(false);
   const [image, setImage] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
 
   const onPressHandler = () => {
     navigation.openDrawer();
@@ -40,8 +37,7 @@ const Home = ({navigation}) => {
       await storage().ref(fileName).putFile(uploadUri);
 
       const url = await storage().ref(fileName).getDownloadURL();
-      setImageUrl(url);
-      console.log(imageUrl);
+
       updateUserData(user, url);
       Alert.alert(
         'Image uploaded!',
@@ -63,13 +59,13 @@ const Home = ({navigation}) => {
     );
     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
       const result = await launchCamera(options);
-      console.log(result);
+      //console.log(result);
       uploadImage(result.assets[0].uri);
     }
   };
   const openGalary = async () => {
     const result = await launchImageLibrary(options);
-    console.log(result);
+    //console.log(result);
     uploadImage(result.assets[0].uri);
   };
 
@@ -78,7 +74,7 @@ const Home = ({navigation}) => {
       const userdata = await fetchUserData(user);
       setFullName(userdata[0]);
       setImage(userdata[1]);
-      console.log(userdata[1]);
+      //console.log(userdata[1]);
     } catch (e) {
       console.log(e);
     }
@@ -165,13 +161,9 @@ const Home = ({navigation}) => {
         </View>
       </View>
       <View style={styles.secondFlexViewOne}>
-        <ScrollView>
-          <SafeAreaView>
-            <View>
-              <Notes />
-            </View>
-          </SafeAreaView>
-        </ScrollView>
+        <View>
+          <Notes navigation={navigation} />
+        </View>
       </View>
       <View style={styles.bottomBarViewOne}>
         <View style={styles.bottomBarViewSecond}>

@@ -3,6 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 
 import AppDrawer from './AppDrawer';
 import CreateNote from '../screens/CreateNote';
+import Notes from '../components/Notes';
 
 const Stack = createStackNavigator();
 
@@ -18,6 +19,7 @@ const AppStack = () => {
         options={{header: () => null}}
       />
       <Stack.Screen name="CreateNote" component={CreateNote} />
+      <Stack.Screen name="Notes" component={Notes} />
     </Stack.Navigator>
   );
 };
