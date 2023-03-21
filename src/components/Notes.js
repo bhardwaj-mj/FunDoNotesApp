@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect} from 'react';
+import React, {useState, useContext, useEffect, useCallback} from 'react';
 import {Text, View, TouchableOpacity, StyleSheet, FlatList} from 'react-native';
 import {AuthContext} from '../navigation/AuthProvider';
 import {fetchNoteData} from '../services/NoteServices';
@@ -11,7 +11,7 @@ const Notes = ({navigation}) => {
   const {user} = useContext(AuthContext);
   const isFocused = useIsFocused();
 
-  const getNotesData = async () => {
+  const getNotesData = useCallback(async () => {
     let notesData = await fetchNoteData(user.uid);
 
     let pinned = [];
@@ -21,18 +21,18 @@ const Notes = ({navigation}) => {
       if (item.pinned) {
         pinned.push(item);
       }
-      if (!item.pinned && !item.archived) {
+      if (!item.pinned && !item.archived && !item.deleted) {
         others.push(item);
       }
     });
     setPinnedNotes(pinned);
     setOtherNotes(others);
-  };
+  }, [user.uid]);
   useEffect(() => {
     if (isFocused) {
       getNotesData();
     }
-  }, [isFocused]);
+  }, [isFocused, getNotesData]);
 
   const editNotes = item => {
     navigation.navigate('CreateNote', {

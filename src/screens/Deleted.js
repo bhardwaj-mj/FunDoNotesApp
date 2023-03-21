@@ -1,36 +1,36 @@
 import React, {useState, useContext, useEffect, useCallback} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {AuthContext} from '../navigation/AuthProvider';
 import {fetchNoteData} from '../services/NoteServices';
 import {useIsFocused} from '@react-navigation/native';
 import NoteCard from '../components/NoteCard';
 
-const Archive = ({navigation}) => {
+const Deleted = ({navigation}) => {
   const {user} = useContext(AuthContext);
   const [notes, setNotes] = useState([]);
   const isFocused = useIsFocused();
-  const archiveNotes = useCallback(async () => {
+  const deleteNotes = useCallback(async () => {
     let notesData = await fetchNoteData(user.uid);
 
-    let archived = [];
+    let deleted = [];
 
     notesData.forEach(item => {
-      if (item.archived) {
-        archived.push(item);
+      if (item.deleted) {
+        deleted.push(item);
       }
     });
-    setNotes(archived);
+    setNotes(deleted);
   }, [user.uid]);
   useEffect(() => {
     if (isFocused) {
-      archiveNotes();
+      deleteNotes();
     }
-  }, [isFocused, archiveNotes]);
+  }, [isFocused, deleteNotes]);
 
   const editNotes = item => {
-    navigation.navigate('CreateNote', {
+    navigation.navigate('DeleteNote', {
       editData: item,
       noteId: item.id,
     });
@@ -53,16 +53,15 @@ const Archive = ({navigation}) => {
             </TouchableOpacity>
           </View>
           <View>
-            <Text style={styles.archiveText}>Archive</Text>
+            <Text style={styles.archiveText}>Deleted</Text>
           </View>
           <View>
-            <TouchableOpacity style={styles.searchButton}>
-              <Ionicons name="search" size={25} color={'white'} />
-            </TouchableOpacity>
-          </View>
-          <View>
-            <TouchableOpacity>
-              <Feather name="grid" color={'white'} size={25} />
+            <TouchableOpacity style={styles.dotButton}>
+              <MaterialCommunityIcons
+                name="dots-vertical"
+                color="white"
+                size={20}
+              />
             </TouchableOpacity>
           </View>
         </View>
@@ -113,10 +112,10 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 160,
   },
-  searchButton: {
-    paddingRight: 20,
-    paddingLeft: 20,
+  dotButton: {
+    marginLeft: 70,
   },
+
   list: {
     paddingLeft: 10,
     paddingRight: 10,
@@ -133,4 +132,4 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
 });
-export default Archive;
+export default Deleted;

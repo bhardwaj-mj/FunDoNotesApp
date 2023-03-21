@@ -103,7 +103,7 @@ const Home = ({navigation}) => {
             </TouchableOpacity>
           </View>
           <View>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('SearchNote')}>
               <Text style={styles.searchText}>Search</Text>
             </TouchableOpacity>
           </View>

@@ -57,7 +57,9 @@ const CustomDrawer = ({props, navigation}) => {
             />
             <Text style={styles.labelText}>Archive</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.buttonStyle}>
+          <TouchableOpacity
+            style={styles.buttonStyle}
+            onPress={() => navigation.navigate('Deleted')}>
             <Icon
               style={styles.iconStyle}
               name="trash-outline"

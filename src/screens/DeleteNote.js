@@ -1,54 +1,34 @@
-import React, {useState, useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   View,
-  Text,
   TextInput,
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  Alert,
+  Text,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {deleteNoteData} from '../services/NoteServices';
 import {AuthContext} from '../navigation/AuthProvider';
-import {addNoteData, updateNoteData} from '../services/NoteServices';
-import CreateNoteBottomSheet from '../components/CreateNoteBottomSheet';
+import DeleteNoteBottomSheet from '../components/DeleteNoteBottomSheet';
 
-const CreateNote = ({navigation, route}) => {
+const DeleteNote = ({navigation, route}) => {
   const noteData = route.params;
-
   const {user} = useContext(AuthContext);
-  const [title, setTitle] = useState(noteData?.editData?.title || '');
-  const [note, setNote] = useState(noteData?.editData?.note || '');
-  const [pinned, setPinned] = useState(noteData?.editData?.pinned || false);
-  const [archived, setArchived] = useState(
-    noteData?.editData?.archived || false,
-  );
-  const [deleted, setDeleted] = useState(noteData?.editData?.deleted || false);
+  const [title, setTitle] = useState(noteData?.editData?.title);
+  const [note, setNote] = useState(noteData?.editData?.note);
   const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
-
-  const obtainedID = noteData?.noteId;
-
+  const deleteNotes = async () => {
+    await deleteNoteData(user.uid);
+  };
   const onPressBack = async () => {
-    if (obtainedID) {
-      await updateNoteData(
-        title,
-        note,
-        pinned,
-        archived,
-        deleted,
-        user.uid,
-        obtainedID,
-      );
-    } else {
-      await addNoteData(title, note, pinned, archived, deleted, user.uid);
-    }
     navigation.goBack();
   };
   return (
     <View style={styles.mainContainer}>
-      <View style={styles.view1}>
-        <View style={styles.view2}>
+      <View style={styles.viewOne}>
+        <View style={styles.viewTwo}>
           <TouchableOpacity onPress={onPressBack}>
             <Ionicons
               name="arrow-back"
@@ -57,49 +37,16 @@ const CreateNote = ({navigation, route}) => {
               style={styles.backButton}
             />
           </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.pinButton}
-            onPress={() => {
-              setPinned(!pinned);
-            }}>
-            <MaterialCommunityIcons
-              name={pinned ? 'pin' : 'pin-outline'}
-              size={25}
-              color="#87ceeb"
-            />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Ionicons
-              name="notifications-outline"
-              size={25}
-              color="#87ceeb"
-              style={styles.notificationButton}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              setArchived(!archived);
-              Alert.alert('Note Archived');
-            }}>
-            <MaterialCommunityIcons
-              name="archive-arrow-down-outline"
-              size={25}
-              color="#87ceeb"
-              style={styles.archiveButton}
-            />
-          </TouchableOpacity>
         </View>
       </View>
-      <View style={styles.view3}>
+      <View style={styles.viewThree}>
         <View>
           <TextInput
             style={styles.titleText}
             value={title}
-            onChangeText={text => setTitle(text)}
+            editable={false}
             placeholder="Title"
             placeholderTextColor="#87ceeb"
-            selectionColor={'#708090'}
           />
         </View>
         <ScrollView>
@@ -107,18 +54,17 @@ const CreateNote = ({navigation, route}) => {
             <TextInput
               style={styles.noteText}
               value={note}
-              onChangeText={text => setNote(text)}
+              editable={false}
               placeholder="Note"
               placeholderTextColor="#87ceeb"
-              selectionColor={'#708090'}
               multiline={true}
             />
           </View>
         </ScrollView>
       </View>
-      <View style={styles.bottomViewOne}>
-        <View style={styles.bottomViewTwo}>
-          <TouchableOpacity style={styles.plusButton}>
+      <View style={styles.viewFour}>
+        <View style={styles.viewFive}>
+          <TouchableOpacity style={styles.plusButton} disabled={true}>
             <MaterialCommunityIcons
               name="plus-box-outline"
               color="#87ceeb"
@@ -126,7 +72,7 @@ const CreateNote = ({navigation, route}) => {
             />
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.colorButton}>
+          <TouchableOpacity style={styles.colorButton} disabled={true}>
             <Ionicons name="color-palette-outline" color="#87ceeb" size={20} />
           </TouchableOpacity>
         </View>
@@ -136,7 +82,6 @@ const CreateNote = ({navigation, route}) => {
         <TouchableOpacity
           onPress={() => {
             setBottomSheetVisible(!bottomSheetVisible);
-            console.log('hello');
           }}>
           <MaterialCommunityIcons
             name="dots-vertical"
@@ -146,11 +91,14 @@ const CreateNote = ({navigation, route}) => {
         </TouchableOpacity>
       </View>
       <View>
-        <CreateNoteBottomSheet
+        <DeleteNoteBottomSheet
           visible={bottomSheetVisible}
           onRequestClose={() => setBottomSheetVisible(false)}
           hideModal={() => setBottomSheetVisible(false)}
-          onPressDelete={() => setDeleted(!deleted)}
+          onPressDeleteForever={async () => {
+            await deleteNoteData(user.uid);
+            console.log('delete');
+          }}
         />
       </View>
     </View>
@@ -161,12 +109,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
   },
-  view1: {
+  viewOne: {
     justifyContent: 'center',
     padding: 10,
     paddingTop: 10,
   },
-  view2: {
+  viewTwo: {
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -174,16 +122,7 @@ const styles = StyleSheet.create({
     padding: 10,
     paddingLeft: 10,
   },
-  pinButton: {
-    marginLeft: 200,
-  },
-  notificationButton: {
-    marginLeft: 20,
-  },
-  archiveButton: {
-    marginLeft: 20,
-  },
-  view3: {
+  viewThree: {
     flex: 1,
     paddingHorizontal: 10,
     margin: 10,
@@ -198,13 +137,13 @@ const styles = StyleSheet.create({
     margin: 10,
     color: '#87ceeb',
   },
-  bottomViewOne: {
+  viewFour: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     margin: 20,
   },
-  bottomViewTwo: {
+  viewFive: {
     flexDirection: 'row',
   },
   plusButton: {
@@ -218,4 +157,4 @@ const styles = StyleSheet.create({
     color: '#87ceeb',
   },
 });
-export default CreateNote;
+export default DeleteNote;
