@@ -6,11 +6,13 @@ import {AuthContext} from '../navigation/AuthProvider';
 import {fetchNoteData} from '../services/NoteServices';
 import {useIsFocused} from '@react-navigation/native';
 import NoteCard from '../components/NoteCard';
+import {useSelector} from 'react-redux';
 
 const Deleted = ({navigation}) => {
   const {user} = useContext(AuthContext);
   const [notes, setNotes] = useState([]);
   const isFocused = useIsFocused();
+  const layout = useSelector(state => state.layout);
   const deleteNotes = useCallback(async () => {
     let notesData = await fetchNoteData(user.uid);
 
@@ -71,9 +73,11 @@ const Deleted = ({navigation}) => {
           <FlatList
             style={styles.list}
             data={notes}
+            numColumns={layout ? 2 : 1}
+            key={layout ? 2 : 1}
             renderItem={({item}) => (
               <TouchableOpacity
-                style={styles.notesView}
+                style={layout ? styles.gridLayout : styles.listLayout}
                 onPress={() => {
                   editNotes(item);
                 }}>
@@ -120,16 +124,24 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
   },
-  notesView: {
+  listLayout: {
     backgroundColor: 'white',
     margin: 7,
     borderColor: '#87ceeb',
-    borderWidth: 1,
+    borderWidth: 2,
     borderRadius: 10,
     padding: 10,
-    paddingLeft: 10,
-    paddingRight: 10,
-    justifyContent: 'space-between',
+    marginLeft: 10,
+    marginRight: 10,
+  },
+  gridLayout: {
+    backgroundColor: 'white',
+    margin: '2.5%',
+    borderColor: '#87ceeb',
+    borderWidth: 2,
+    borderRadius: 10,
+    padding: 10,
+    width: '45%',
   },
 });
 export default Deleted;

@@ -10,12 +10,14 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {fetchNoteData} from '../services/NoteServices';
 import {AuthContext} from '../navigation/AuthProvider';
 import {useIsFocused} from '@react-navigation/native';
+import {useSelector} from 'react-redux';
 import NoteCard from '../components/NoteCard';
 const SearchNote = ({navigation}) => {
   const [noteData, setNoteData] = useState([]);
   const [searchData, setSearchData] = useState([]);
   const isFocused = useIsFocused();
   const {user} = useContext(AuthContext);
+  const layout = useSelector(state => state.layout);
   const fetchData = useCallback(async () => {
     let data = await fetchNoteData(user.uid);
     setNoteData(data);
@@ -59,9 +61,11 @@ const SearchNote = ({navigation}) => {
           <FlatList
             style={styles.list}
             data={searchData}
+            numColumns={layout ? 2 : 1}
+            key={layout ? 2 : 1}
             renderItem={({item}) => (
               <TouchableOpacity
-                style={styles.notesView}
+                style={layout ? styles.gridLayout : styles.listLayout}
                 onPress={() => {
                   editNotes(item);
                 }}>
@@ -96,16 +100,25 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
   },
-  notesView: {
+
+  listLayout: {
     backgroundColor: 'white',
     margin: 7,
     borderColor: '#87ceeb',
-    borderWidth: 1,
+    borderWidth: 2,
     borderRadius: 10,
     padding: 10,
-    paddingLeft: 10,
-    paddingRight: 10,
-    justifyContent: 'space-between',
+    marginLeft: 10,
+    marginRight: 10,
+  },
+  gridLayout: {
+    backgroundColor: 'white',
+    margin: '2.5%',
+    borderColor: '#87ceeb',
+    borderWidth: 2,
+    borderRadius: 10,
+    padding: 10,
+    width: '45%',
   },
 });
 export default SearchNote;

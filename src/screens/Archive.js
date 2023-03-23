@@ -2,15 +2,21 @@ import React, {useState, useContext, useEffect, useCallback} from 'react';
 import {View, Text, StyleSheet, TouchableOpacity, FlatList} from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {AuthContext} from '../navigation/AuthProvider';
 import {fetchNoteData} from '../services/NoteServices';
 import {useIsFocused} from '@react-navigation/native';
 import NoteCard from '../components/NoteCard';
+import {layoutChange} from '../redux/Action';
+import {useSelector, useDispatch} from 'react-redux';
 
 const Archive = ({navigation}) => {
   const {user} = useContext(AuthContext);
   const [notes, setNotes] = useState([]);
   const isFocused = useIsFocused();
+  const layout = useSelector(state => state.layout);
+  const dispatch = useDispatch();
+
   const archiveNotes = useCallback(async () => {
     let notesData = await fetchNoteData(user.uid);
 
@@ -61,8 +67,12 @@ const Archive = ({navigation}) => {
             </TouchableOpacity>
           </View>
           <View>
-            <TouchableOpacity>
-              <Feather name="grid" color={'white'} size={25} />
+            <TouchableOpacity onPress={() => dispatch(layoutChange())}>
+              <MaterialCommunityIcons
+                name={layout ? 'view-agenda-outline' : 'view-grid-outline'}
+                color={'white'}
+                size={25}
+              />
             </TouchableOpacity>
           </View>
         </View>
@@ -72,9 +82,11 @@ const Archive = ({navigation}) => {
           <FlatList
             style={styles.list}
             data={notes}
+            numColumns={layout ? 2 : 1}
+            key={layout ? 2 : 1}
             renderItem={({item}) => (
               <TouchableOpacity
-                style={styles.notesView}
+                style={layout ? styles.gridLayout : styles.listLayout}
                 onPress={() => {
                   editNotes(item);
                 }}>
@@ -121,16 +133,25 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
   },
-  notesView: {
+
+  listLayout: {
     backgroundColor: 'white',
     margin: 7,
     borderColor: '#87ceeb',
-    borderWidth: 1,
+    borderWidth: 2,
     borderRadius: 10,
     padding: 10,
-    paddingLeft: 10,
-    paddingRight: 10,
-    justifyContent: 'space-between',
+    marginLeft: 10,
+    marginRight: 10,
+  },
+  gridLayout: {
+    backgroundColor: 'white',
+    margin: '2.5%',
+    borderColor: '#87ceeb',
+    borderWidth: 2,
+    borderRadius: 10,
+    padding: 10,
+    width: '45%',
   },
 });
 export default Archive;

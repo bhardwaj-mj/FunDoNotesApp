@@ -1,4 +1,4 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React, {useContext, useState, useEffect, useCallback} from 'react';
 import {
   Text,
   View,
@@ -11,6 +11,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import {Avatar} from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {AuthContext} from '../navigation/AuthProvider';
 import CustomModal from '../components/CustomModal';
 import {fetchUserData, updateUserData} from '../services/UserServices';
@@ -18,6 +19,8 @@ import ImagePickerModal from '../components/ImagePickerModal';
 import storage from '@react-native-firebase/storage';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import Notes from '../components/Notes';
+import {layoutChange} from '../redux/Action';
+import {useSelector, useDispatch} from 'react-redux';
 
 const Home = ({navigation}) => {
   const {user, userLogout} = useContext(AuthContext);
@@ -25,28 +28,33 @@ const Home = ({navigation}) => {
   const [fullName, setFullName] = useState();
   const [imageModalVisible, setImageModalVisible] = useState(false);
   const [image, setImage] = useState('');
+  const layout = useSelector(state => state.layout);
+  const dispatch = useDispatch();
 
   const onPressHandler = () => {
     navigation.openDrawer();
   };
-  const uploadImage = async img => {
-    const uploadUri = img;
-    const fileName = uploadUri.substring(uploadUri.lastIndexOf('/') + 1);
+  const uploadImage = useCallback(
+    async img => {
+      const uploadUri = img;
+      const fileName = uploadUri.substring(uploadUri.lastIndexOf('/') + 1);
 
-    try {
-      await storage().ref(fileName).putFile(uploadUri);
+      try {
+        await storage().ref(fileName).putFile(uploadUri);
 
-      const url = await storage().ref(fileName).getDownloadURL();
+        const url = await storage().ref(fileName).getDownloadURL();
 
-      updateUserData(user, url);
-      Alert.alert(
-        'Image uploaded!',
-        'Your image has been uploaded to the Firebase cloud Storage successfully!',
-      );
-    } catch (e) {
-      console.log(e);
-    }
-  };
+        updateUserData(user, url);
+        Alert.alert(
+          'Image uploaded!',
+          'Your image has been uploaded to the Firebase cloud Storage successfully!',
+        );
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    [user],
+  );
   let options = {
     saveToPhotos: true,
     mediaType: 'photo',
@@ -69,7 +77,7 @@ const Home = ({navigation}) => {
     uploadImage(result.assets[0].uri);
   };
 
-  const dataReceiver = async () => {
+  const dataReceiver = useCallback(async () => {
     try {
       const userdata = await fetchUserData(user);
       setFullName(userdata[0]);
@@ -78,7 +86,7 @@ const Home = ({navigation}) => {
     } catch (e) {
       console.log(e);
     }
-  };
+  }, [user]);
 
   useEffect(() => {
     try {
@@ -86,7 +94,7 @@ const Home = ({navigation}) => {
     } catch (e) {
       console.log(e);
     }
-  }, [uploadImage]);
+  }, [uploadImage, dataReceiver]);
 
   return (
     <View style={styles.container}>
@@ -108,8 +116,12 @@ const Home = ({navigation}) => {
             </TouchableOpacity>
           </View>
           <View style={styles.gridButton}>
-            <TouchableOpacity>
-              <Feather name="grid" color={'white'} size={25} />
+            <TouchableOpacity onPress={() => dispatch(layoutChange())}>
+              <MaterialCommunityIcons
+                name={layout ? 'view-agenda-outline' : 'view-grid-outline'}
+                color={'white'}
+                size={25}
+              />
             </TouchableOpacity>
           </View>
           <View>
@@ -162,7 +174,7 @@ const Home = ({navigation}) => {
       </View>
       <View style={styles.secondFlexViewOne}>
         <View>
-          <Notes navigation={navigation} />
+          <Notes navigation={navigation} layout={layout} setLayout={layout} />
         </View>
       </View>
       <View style={styles.bottomBarViewOne}>
@@ -257,7 +269,7 @@ const styles = StyleSheet.create({
   secondFlexText: {
     color: 'white',
     fontSize: 20,
-    fontWieght: 'Bold',
+    fontWeight: 'Bold',
   },
   bottomBarViewOne: {
     backgroundColor: '#87ceeb',

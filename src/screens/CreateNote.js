@@ -30,20 +30,24 @@ const CreateNote = ({navigation, route}) => {
   const obtainedID = noteData?.noteId;
 
   const onPressBack = async () => {
-    if (obtainedID) {
-      await updateNoteData(
-        title,
-        note,
-        pinned,
-        archived,
-        deleted,
-        user.uid,
-        obtainedID,
-      );
+    if (title === '' && note === '') {
+      navigation.goBack();
     } else {
-      await addNoteData(title, note, pinned, archived, deleted, user.uid);
+      if (obtainedID) {
+        await updateNoteData(
+          title,
+          note,
+          pinned,
+          archived,
+          deleted,
+          user.uid,
+          obtainedID,
+        );
+      } else {
+        await addNoteData(title, note, pinned, archived, deleted, user.uid);
+      }
+      navigation.goBack();
     }
-    navigation.goBack();
   };
   return (
     <View style={styles.mainContainer}>
