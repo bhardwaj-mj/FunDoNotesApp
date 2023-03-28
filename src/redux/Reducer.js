@@ -1,5 +1,6 @@
 const initialState = {
   layout: false,
+  labelData: [],
 };
 export const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -7,6 +8,11 @@ export const reducer = (state = initialState, action) => {
       return {
         ...state,
         layout: !state.layout,
+      };
+    case 'LabelsData':
+      return {
+        ...state,
+        labelData: action.payload,
       };
     default:
       return state;

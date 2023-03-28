@@ -1,10 +1,14 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
+import Chip from './chip';
 const NoteCard = props => {
   return (
     <View>
-      <Text style={styles.titleText}>{props.title}</Text>
-      <Text style={styles.noteText}>{props.note}</Text>
+      {props.title && <Text style={styles.titleText}>{props.title}</Text>}
+      {props.note && <Text style={styles.noteText}>{props.note}</Text>}
+      {/* {props.labelData.map(item => (
+        <Chip key={item.id}>{item.label}</Chip>
+      ))} */}
     </View>
   );
 };

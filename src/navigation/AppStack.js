@@ -6,7 +6,7 @@ import CreateNote from '../screens/CreateNote';
 import Notes from '../components/Notes';
 import DeleteNote from '../screens/DeleteNote';
 import SearchNote from '../screens/SearchNote';
-import Home from '../screens/Home';
+import AddLabelsToNote from '../screens/AddLabelsToNote';
 
 const Stack = createStackNavigator();
 
@@ -25,6 +25,7 @@ const AppStack = () => {
       <Stack.Screen name="Notes" component={Notes} />
       <Stack.Screen name="DeleteNote" component={DeleteNote} />
       <Stack.Screen name="SearchNote" component={SearchNote} />
+      <Stack.Screen name="AddLabelsToNote" component={AddLabelsToNote} />
     </Stack.Navigator>
   );
 };

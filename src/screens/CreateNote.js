@@ -13,6 +13,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {AuthContext} from '../navigation/AuthProvider';
 import {addNoteData, updateNoteData} from '../services/NoteServices';
 import CreateNoteBottomSheet from '../components/CreateNoteBottomSheet';
+import Chip from '../components/chip';
 
 const CreateNote = ({navigation, route}) => {
   const noteData = route.params;
@@ -27,7 +28,10 @@ const CreateNote = ({navigation, route}) => {
   const [deleted, setDeleted] = useState(noteData?.editData?.deleted || false);
   const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
 
+  let labelData = route.params?.checkedLabelsData || [];
+
   const obtainedID = noteData?.noteId;
+  const noteId = obtainedID;
 
   const onPressBack = async () => {
     if (title === '' && note === '') {
@@ -41,10 +45,20 @@ const CreateNote = ({navigation, route}) => {
           archived,
           deleted,
           user.uid,
-          obtainedID,
+          noteId,
+          labelData,
         );
       } else {
-        await addNoteData(title, note, pinned, archived, deleted, user.uid);
+        await addNoteData(
+          title,
+          note,
+          pinned,
+          archived,
+          deleted,
+          user.uid,
+          labelData,
+          noteId,
+        );
       }
       navigation.goBack();
     }
@@ -118,6 +132,11 @@ const CreateNote = ({navigation, route}) => {
               multiline={true}
             />
           </View>
+          <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+            {labelData.map(item => (
+              <Chip key={item.id}>{item.label}</Chip>
+            ))}
+          </View>
         </ScrollView>
       </View>
       <View style={styles.bottomViewOne}>
@@ -150,12 +169,15 @@ const CreateNote = ({navigation, route}) => {
         </TouchableOpacity>
       </View>
       <View>
-        <CreateNoteBottomSheet
-          visible={bottomSheetVisible}
-          onRequestClose={() => setBottomSheetVisible(false)}
-          hideModal={() => setBottomSheetVisible(false)}
-          onPressDelete={() => setDeleted(!deleted)}
-        />
+        {bottomSheetVisible ? (
+          <CreateNoteBottomSheet
+            visible={bottomSheetVisible}
+            onRequestClose={() => setBottomSheetVisible(false)}
+            hideModal={() => setBottomSheetVisible(false)}
+            onPressDelete={() => setDeleted(!deleted)}
+            labelPress={() => navigation.navigate('AddLabelsToNote')}
+          />
+        ) : null}
       </View>
     </View>
   );
