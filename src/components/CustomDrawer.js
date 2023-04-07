@@ -49,6 +49,7 @@ const CustomDrawer = ({props, navigation}) => {
           />
 
           <DrawerItem
+            onPress={() => navigation.navigate('Remainder')}
             icon={() => (
               <Icon name="notifications-outline" size={25} color={'white'} />
             )}
@@ -78,7 +79,14 @@ const CustomDrawer = ({props, navigation}) => {
 
             <View style={styles.labelItems}>
               {labelData?.map(item => (
-                <TouchableOpacity style={styles.itemView} key={item.id}>
+                <TouchableOpacity
+                  style={styles.itemView}
+                  key={item.id}
+                  onPress={() =>
+                    navigation.navigate('LabelsWithNotes', {
+                      ...item,
+                    })
+                  }>
                   <View>
                     <MaterialCommunityIcons
                       name="label-outline"

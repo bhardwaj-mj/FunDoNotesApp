@@ -6,14 +6,16 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
-  Alert,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {AuthContext} from '../navigation/AuthProvider';
 import {addNoteData, updateNoteData} from '../services/NoteServices';
 import CreateNoteBottomSheet from '../components/CreateNoteBottomSheet';
-import Chip from '../components/chip';
+import RemainderBottomSheet from '../components/RemainderBottomSheet';
+import Chip from '../components/Chip';
+import uuid from 'react-native-uuid';
+import moment from 'moment';
 
 const CreateNote = ({navigation, route}) => {
   const noteData = route.params;
@@ -25,13 +27,19 @@ const CreateNote = ({navigation, route}) => {
   const [archived, setArchived] = useState(
     noteData?.editData?.archived || false,
   );
+  const [notificationDateAndTime, setNotificationDateAndTime] = useState(
+    noteData?.editData?.notificationDateAndTime || '',
+  );
   const [deleted, setDeleted] = useState(noteData?.editData?.deleted || false);
   const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
+  const [remainderBottomSheetVisible, setRemainderBottomSheetVisible] =
+    useState(false);
 
-  let labelData = route.params?.checkedLabelsData || [];
+  let labelData =
+    route.params?.checkedLabelsData || noteData?.editData?.labelData || [];
 
   const obtainedID = noteData?.noteId;
-  const noteId = obtainedID;
+  const noteId = uuid.v4();
 
   const onPressBack = async () => {
     if (title === '' && note === '') {
@@ -45,8 +53,9 @@ const CreateNote = ({navigation, route}) => {
           archived,
           deleted,
           user.uid,
-          noteId,
+          obtainedID,
           labelData,
+          notificationDateAndTime,
         );
       } else {
         await addNoteData(
@@ -56,9 +65,11 @@ const CreateNote = ({navigation, route}) => {
           archived,
           deleted,
           user.uid,
-          labelData,
           noteId,
+          labelData,
+          notificationDateAndTime,
         );
+        console.log(noteId);
       }
       navigation.goBack();
     }
@@ -87,7 +98,10 @@ const CreateNote = ({navigation, route}) => {
               color="#87ceeb"
             />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() =>
+              setRemainderBottomSheetVisible(!remainderBottomSheetVisible)
+            }>
             <Ionicons
               name="notifications-outline"
               size={25}
@@ -98,7 +112,6 @@ const CreateNote = ({navigation, route}) => {
           <TouchableOpacity
             onPress={() => {
               setArchived(!archived);
-              Alert.alert('Note Archived');
             }}>
             <MaterialCommunityIcons
               name="archive-arrow-down-outline"
@@ -133,6 +146,25 @@ const CreateNote = ({navigation, route}) => {
             />
           </View>
           <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+            {notificationDateAndTime ? (
+              <View
+                style={{
+                  fontSize: 18,
+                  color: 'white',
+                  borderRadius: 20,
+                  backgroundColor: 'skyblue',
+                  padding: 8,
+                  margin: 10,
+                }}>
+                <View>
+                  <Text style={{color: 'white'}}>
+                    {notificationDateAndTime
+                      ? moment(notificationDateAndTime).format('LLLL')
+                      : null}
+                  </Text>
+                </View>
+              </View>
+            ) : null}
             {labelData.map(item => (
               <Chip key={item.id}>{item.label}</Chip>
             ))}
@@ -159,7 +191,6 @@ const CreateNote = ({navigation, route}) => {
         <TouchableOpacity
           onPress={() => {
             setBottomSheetVisible(!bottomSheetVisible);
-            console.log('hello');
           }}>
           <MaterialCommunityIcons
             name="dots-vertical"
@@ -175,9 +206,22 @@ const CreateNote = ({navigation, route}) => {
             onRequestClose={() => setBottomSheetVisible(false)}
             hideModal={() => setBottomSheetVisible(false)}
             onPressDelete={() => setDeleted(!deleted)}
-            labelPress={() => navigation.navigate('AddLabelsToNote')}
+            labelPress={() =>
+              navigation.navigate('AddLabelsToNote', {
+                noteId: obtainedID,
+                labelData: labelData,
+              })
+            }
           />
         ) : null}
+      </View>
+      <View>
+        <RemainderBottomSheet
+          remainderBottomSheetVisible={remainderBottomSheetVisible}
+          setRemainderBottomSheetVisible={setRemainderBottomSheetVisible}
+          notificationDateAndTime={notificationDateAndTime}
+          setNotificationDateAndTime={setNotificationDateAndTime}
+        />
       </View>
     </View>
   );

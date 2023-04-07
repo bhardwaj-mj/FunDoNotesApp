@@ -5,7 +5,6 @@ import {
   ScrollView,
   StyleSheet,
   TextInput,
-  BackHandler,
 } from 'react-native';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -13,7 +12,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {labelsData} from '../redux/Action';
 import {AuthContext} from '../navigation/AuthProvider';
 import {useSelector, useDispatch} from 'react-redux';
-import {fetchLabelData} from '../services/LabelServices';
+import {fetchLabelData, updateLabelData} from '../services/LabelServices';
 import LabelCheckBox from '../components/LabelCheckBox';
 import {useIsFocused} from '@react-navigation/native';
 const AddLabelsToNote = ({navigation, route}) => {
@@ -41,11 +40,9 @@ const AddLabelsToNote = ({navigation, route}) => {
       setCheckedLabels(temp);
     }
   };
-
   const isChecked = data => {
     return checkedLabels.find(element => element.id === data.id);
   };
-
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>

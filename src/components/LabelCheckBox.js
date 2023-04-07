@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import {View, Text, StyleSheet, TouchableWithoutFeedback} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -42,4 +42,4 @@ const styles = StyleSheet.create({
     width: '68%',
   },
 });
-export default LabelCheckBox;
+export default memo(LabelCheckBox);

@@ -1,14 +1,16 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import Chip from './chip';
+import Chip from './Chip';
 const NoteCard = props => {
   return (
     <View>
       {props.title && <Text style={styles.titleText}>{props.title}</Text>}
       {props.note && <Text style={styles.noteText}>{props.note}</Text>}
-      {/* {props.labelData.map(item => (
-        <Chip key={item.id}>{item.label}</Chip>
-      ))} */}
+      <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+        {props.labelData.map(item => (
+          <Chip key={item.id}>{item.label}</Chip>
+        ))}
+      </View>
     </View>
   );
 };

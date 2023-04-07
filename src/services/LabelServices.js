@@ -32,7 +32,7 @@ export const fetchLabelData = async user => {
     console.log(e);
   }
 };
-export const updateLabelData = async (label, user, labelId) => {
+export const updateLabelData = async (label, user, labelId, noteId) => {
   try {
     await firestore()
       .collection('NoteDetails')
@@ -41,6 +41,7 @@ export const updateLabelData = async (label, user, labelId) => {
       .doc(labelId)
       .update({
         label: label,
+        noteId: noteId,
       });
   } catch (e) {
     console.log(e);

@@ -9,8 +9,6 @@ const Chip = ({children}) => {
   );
 };
 
-export default Chip;
-
 const styles = StyleSheet.create({
   container: {
     fontSize: 18,
@@ -19,6 +17,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'skyblue',
     padding: 8,
     margin: 10,
-    width: 'fit-content',
+    //width: 'fit-content',
   },
 });
+export default Chip;

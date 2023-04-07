@@ -19,7 +19,6 @@ import LabelCard from '../components/LabelsCard';
 const CreateNewLabel = ({navigation}) => {
   const [label, setLabel] = useState('');
   const [icon, setIcon] = useState(false);
-  // const [labelsData, setLabelsData] = useState([]);
   const {user} = useContext(AuthContext);
   const isFocused = useIsFocused();
   const labelData = useSelector(state => state.labelData);

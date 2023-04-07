@@ -9,6 +9,7 @@ export const addNoteData = async (
   user,
   noteId,
   labelData,
+  notificationDateAndTime,
 ) => {
   try {
     await firestore()
@@ -23,9 +24,8 @@ export const addNoteData = async (
         archived: archived,
         deleted: deleted,
         labelData: labelData,
+        notificationDateAndTime: notificationDateAndTime,
       });
-
-    console.log('Note added!');
   } catch (e) {
     console.log(e);
   }
@@ -56,14 +56,15 @@ export const updateNoteData = async (
   archived,
   deleted,
   user,
-  noteId,
+  obtainedID,
   labelData,
+  notificationDateAndTime,
 ) => {
   await firestore()
     .collection('NoteDetails')
     .doc(user)
     .collection('Notes')
-    .doc(noteId)
+    .doc(obtainedID)
     .update({
       title: title,
       note: note,
@@ -71,6 +72,7 @@ export const updateNoteData = async (
       archived: archived,
       deleted: deleted,
       labelData: labelData,
+      notificationDateAndTime: notificationDateAndTime,
     });
 };
 export const deleteNoteData = async user => {

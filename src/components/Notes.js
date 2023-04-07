@@ -43,7 +43,11 @@ const Notes = ({navigation, layout}) => {
   const PinnedFlatList = () => {
     return (
       <View>
-        <Text style={styles.heading}>{pinnedNotes.length ? 'Pinned' : ''}</Text>
+        {pinnedNotes && (
+          <Text style={styles.heading}>
+            {pinnedNotes.length ? 'Pinned' : null}
+          </Text>
+        )}
         <FlatList
           numColumns={layout ? 2 : 1}
           key={layout ? 2 : 1}
