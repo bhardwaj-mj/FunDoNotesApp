@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {
   View,
   Text,
@@ -16,6 +16,7 @@ import RemainderBottomSheet from '../components/RemainderBottomSheet';
 import Chip from '../components/Chip';
 import uuid from 'react-native-uuid';
 import moment from 'moment';
+import PushNotification from 'react-native-push-notification';
 
 const CreateNote = ({navigation, route}) => {
   const noteData = route.params;
@@ -71,9 +72,38 @@ const CreateNote = ({navigation, route}) => {
         );
         console.log(noteId);
       }
+      notificationDateAndTime ? handleNotification() : null;
       navigation.goBack();
     }
   };
+  const createChannels = () => {
+    PushNotification.createChannel(
+      {
+        channelId: 'Remainders',
+        channelName: 'Remainder Notification',
+        channelDescription: 'Reminder for any task',
+      },
+      () => {},
+    );
+  };
+  const handleNotification = () => {
+    PushNotification.localNotificationSchedule({
+      id: moment(notificationDateAndTime).unix(),
+      channelId: 'Remainders',
+      title: title,
+      message: note,
+      date: moment(notificationDateAndTime).toDate(),
+    });
+  };
+  const cancelNotification = () => {
+    setNotificationDateAndTime(null);
+    PushNotification.cancelLocalNotification(
+      moment(notificationDateAndTime).unix(),
+    );
+  };
+  useEffect(() => {
+    createChannels();
+  }, []);
   return (
     <View style={styles.mainContainer}>
       <View style={styles.view1}>
@@ -145,23 +175,37 @@ const CreateNote = ({navigation, route}) => {
               multiline={true}
             />
           </View>
-          <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+          <View style={styles.labelContainer}>
             {notificationDateAndTime ? (
-              <View
-                style={{
-                  fontSize: 18,
-                  color: 'white',
-                  borderRadius: 20,
-                  backgroundColor: 'skyblue',
-                  padding: 8,
-                  margin: 10,
-                }}>
-                <View>
-                  <Text style={{color: 'white'}}>
+              <View style={styles.notificationChip}>
+                <View style={styles.notificationContainer}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setRemainderBottomSheetVisible(
+                        !remainderBottomSheetVisible,
+                      );
+                    }}>
+                    <MaterialCommunityIcons
+                      name="alarm"
+                      size={20}
+                      color={'white'}
+                    />
+                  </TouchableOpacity>
+                  <Text style={styles.notificationText}>
                     {notificationDateAndTime
                       ? moment(notificationDateAndTime).format('LLLL')
                       : null}
                   </Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      cancelNotification();
+                    }}>
+                    <MaterialCommunityIcons
+                      name="close"
+                      size={20}
+                      color={'white'}
+                    />
+                  </TouchableOpacity>
                 </View>
               </View>
             ) : null}
@@ -286,6 +330,26 @@ const styles = StyleSheet.create({
   editText: {
     fontSize: 20,
     color: '#87ceeb',
+  },
+  notificationChip: {
+    borderRadius: 20,
+    backgroundColor: '#87ceeb',
+    padding: 8,
+    margin: 10,
+  },
+  notificationContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  notificationText: {
+    marginLeft: 10,
+    marginRight: 10,
+    color: 'white',
+    fontSize: 18,
+  },
+  labelContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
   },
 });
 export default CreateNote;
