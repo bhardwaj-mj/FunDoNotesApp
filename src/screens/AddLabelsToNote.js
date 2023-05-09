@@ -12,7 +12,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {labelsData} from '../redux/Action';
 import {AuthContext} from '../navigation/AuthProvider';
 import {useSelector, useDispatch} from 'react-redux';
-import {fetchLabelData, updateLabelData} from '../services/LabelServices';
+import {fetchLabelData} from '../services/LabelServices';
 import LabelCheckBox from '../components/LabelCheckBox';
 import {useIsFocused} from '@react-navigation/native';
 const AddLabelsToNote = ({navigation, route}) => {

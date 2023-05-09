@@ -2,8 +2,11 @@ import React from 'react';
 import {Text, View, TouchableOpacity, Modal, StyleSheet} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Languages from '../utility/localization/Languages';
+import {useSelector} from 'react-redux';
 
 const ImagePickerModal = props => {
+  const changeLang = useSelector(state => state.toggle);
   return (
     <View>
       <Modal
@@ -20,13 +23,21 @@ const ImagePickerModal = props => {
             <TouchableOpacity
               style={styles.modalBtn}
               onPress={props.onPressOpenCamera}>
-              <Text style={styles.text}>Camera</Text>
+              <Text style={styles.text}>
+                {changeLang
+                  ? Languages._props.hin.Camera
+                  : Languages._props.en.Camera}
+              </Text>
               <Ionicons name="camera" size={40} color="white" />
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.modalBtn}
               onPress={props.onPressOpenGalary}>
-              <Text style={styles.text}>Galary</Text>
+              <Text style={styles.text}>
+                {changeLang
+                  ? Languages._props.hin.Galary
+                  : Languages._props.en.Galary}
+              </Text>
               <FontAwesome name="photo" size={40} color="white" />
             </TouchableOpacity>
           </View>

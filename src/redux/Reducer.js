@@ -1,6 +1,7 @@
 const initialState = {
   layout: false,
   labelData: [],
+  toggle: false,
 };
 export const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -14,6 +15,9 @@ export const reducer = (state = initialState, action) => {
         ...state,
         labelData: action.payload,
       };
+    case 'Toggle': {
+      return {...state, toggle: !state.toggle};
+    }
     default:
       return state;
   }

@@ -9,3 +9,9 @@ export const labelsData = label => {
     payload: label,
   };
 };
+export const toggleLang = toggle => {
+  return {
+    type: 'Toggle',
+    //payload: toggle,
+  };
+};

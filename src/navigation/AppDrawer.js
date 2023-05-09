@@ -7,6 +7,7 @@ import Deleted from '../screens/Deleted';
 import CreateNewLabel from '../screens/CreateNewLabel';
 import LabelsWithNotes from '../screens/LabelsWithNotes';
 import Remainder from '../screens/Remainder';
+import Settings from '../screens/Settings';
 const Drawer = createDrawerNavigator();
 const AppDrawer = () => {
   return (
@@ -22,6 +23,7 @@ const AppDrawer = () => {
       <Drawer.Screen name="NewLabel" component={CreateNewLabel} />
       <Drawer.Screen name="LabelsWithNotes" component={LabelsWithNotes} />
       <Drawer.Screen name="Remainder" component={Remainder} />
+      <Drawer.Screen name="Settings" component={Settings} />
     </Drawer.Navigator>
   );
 };

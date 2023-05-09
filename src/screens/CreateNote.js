@@ -17,6 +17,8 @@ import Chip from '../components/Chip';
 import uuid from 'react-native-uuid';
 import moment from 'moment';
 import PushNotification from 'react-native-push-notification';
+import Languages from '../utility/localization/Languages';
+import {useSelector} from 'react-redux';
 
 const CreateNote = ({navigation, route}) => {
   const noteData = route.params;
@@ -41,6 +43,7 @@ const CreateNote = ({navigation, route}) => {
 
   const obtainedID = noteData?.noteId;
   const noteId = uuid.v4();
+  const changeLang = useSelector(state => state.toggle);
 
   const onPressBack = async () => {
     if (title === '' && note === '') {
@@ -158,7 +161,11 @@ const CreateNote = ({navigation, route}) => {
             style={styles.titleText}
             value={title}
             onChangeText={text => setTitle(text)}
-            placeholder="Title"
+            placeholder={
+              changeLang
+                ? Languages._props.hin.Title
+                : Languages._props.en.Title
+            }
             placeholderTextColor="#87ceeb"
             selectionColor={'#708090'}
           />
@@ -169,7 +176,11 @@ const CreateNote = ({navigation, route}) => {
               style={styles.noteText}
               value={note}
               onChangeText={text => setNote(text)}
-              placeholder="Note"
+              placeholder={
+                changeLang
+                  ? Languages._props.hin.Note
+                  : Languages._props.en.Note
+              }
               placeholderTextColor="#87ceeb"
               selectionColor={'#708090'}
               multiline={true}
@@ -230,7 +241,11 @@ const CreateNote = ({navigation, route}) => {
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.editText}>Edited </Text>
+        <Text style={styles.editText}>
+          {changeLang
+            ? Languages._props.hin.Edited
+            : Languages._props.en.Edited}
+        </Text>
 
         <TouchableOpacity
           onPress={() => {

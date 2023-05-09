@@ -12,12 +12,16 @@ import {AuthContext} from '../navigation/AuthProvider';
 import {useIsFocused} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import NoteCard from '../components/NoteCard';
+import {pageStyles} from '../utility/GlobalStyle';
+import Languages from '../utility/localization/Languages';
+
 const SearchNote = ({navigation}) => {
   const [noteData, setNoteData] = useState([]);
   const [searchData, setSearchData] = useState([]);
   const isFocused = useIsFocused();
   const {user} = useContext(AuthContext);
   const layout = useSelector(state => state.layout);
+  const changeLang = useSelector(state => state.toggle);
   const fetchData = useCallback(async () => {
     let data = await fetchNoteData(user.uid);
     setNoteData(data);
@@ -50,7 +54,11 @@ const SearchNote = ({navigation}) => {
         </TouchableOpacity>
         <TextInput
           style={styles.textInput}
-          placeholder="Search your notes"
+          placeholder={
+            changeLang
+              ? Languages._props.hin.Search_Your_Notes
+              : Languages._props.en.Search_Your_Notes
+          }
           autoFocus={true}
           placeholderTextColor="white"
           onChangeText={text => getSearchTerm(text)}
@@ -59,13 +67,13 @@ const SearchNote = ({navigation}) => {
       <View style={{flex: 1}}>
         <View>
           <FlatList
-            style={styles.list}
+            style={pageStyles.list}
             data={searchData}
             numColumns={layout ? 2 : 1}
             key={layout ? 2 : 1}
             renderItem={({item}) => (
               <TouchableOpacity
-                style={layout ? styles.gridLayout : styles.listLayout}
+                style={layout ? pageStyles.gridLayout : pageStyles.listLayout}
                 onPress={() => {
                   editNotes(item);
                 }}>
@@ -95,30 +103,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginLeft: 20,
     width: '80%',
-  },
-  list: {
-    paddingLeft: 10,
-    paddingRight: 10,
-  },
-
-  listLayout: {
-    backgroundColor: 'white',
-    margin: 7,
-    borderColor: '#87ceeb',
-    borderWidth: 2,
-    borderRadius: 10,
-    padding: 10,
-    marginLeft: 10,
-    marginRight: 10,
-  },
-  gridLayout: {
-    backgroundColor: 'white',
-    margin: '2.5%',
-    borderColor: '#87ceeb',
-    borderWidth: 2,
-    borderRadius: 10,
-    padding: 10,
-    width: '45%',
   },
 });
 export default SearchNote;

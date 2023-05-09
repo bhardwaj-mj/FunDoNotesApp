@@ -9,12 +9,15 @@ import {useSelector, useDispatch} from 'react-redux';
 import {fetchNoteData} from '../services/NoteServices';
 import {useIsFocused} from '@react-navigation/native';
 import NoteCard from '../components/NoteCard';
+import {pageStyles} from '../utility/GlobalStyle';
+import Languages from '../utility/localization/Languages';
 const Remainder = ({navigation}) => {
   const {user} = useContext(AuthContext);
   const layout = useSelector(state => state.layout);
   const dispatch = useDispatch();
   const [notes, setNotes] = useState([]);
   const isFocused = useIsFocused();
+  const changeLang = useSelector(state => state.toggle);
   const archiveNotes = useCallback(async () => {
     let notesData = await fetchNoteData(user.uid);
 
@@ -48,7 +51,11 @@ const Remainder = ({navigation}) => {
           }}>
           <Feather name="menu" color={'#87ceeb'} size={25} />
         </TouchableOpacity>
-        <Text style={styles.text}>Remainder</Text>
+        <Text style={styles.text}>
+          {changeLang
+            ? Languages._props.hin.Reminder
+            : Languages._props.en.Reminder}
+        </Text>
         <TouchableOpacity
           style={styles.searchButton}
           onPress={() => navigation.navigate('SearchNote')}>
@@ -68,13 +75,13 @@ const Remainder = ({navigation}) => {
       <View>
         <View>
           <FlatList
-            style={styles.list}
+            style={pageStyles.list}
             data={notes}
             numColumns={layout ? 2 : 1}
             key={layout ? 2 : 1}
             renderItem={({item}) => (
               <TouchableOpacity
-                style={layout ? styles.gridLayout : styles.listLayout}
+                style={layout ? pageStyles.gridLayout : pageStyles.listLayout}
                 onPress={() => {
                   editNotes(item);
                 }}>
@@ -107,30 +114,6 @@ const styles = StyleSheet.create({
   searchButton: {
     paddingRight: 20,
     paddingLeft: 20,
-  },
-  list: {
-    paddingLeft: 10,
-    paddingRight: 10,
-  },
-
-  listLayout: {
-    backgroundColor: 'white',
-    margin: 7,
-    borderColor: '#87ceeb',
-    borderWidth: 2,
-    borderRadius: 10,
-    padding: 10,
-    marginLeft: 10,
-    marginRight: 10,
-  },
-  gridLayout: {
-    backgroundColor: 'white',
-    margin: '2.5%',
-    borderColor: '#87ceeb',
-    borderWidth: 2,
-    borderRadius: 10,
-    padding: 10,
-    width: '45%',
   },
 });
 export default Remainder;

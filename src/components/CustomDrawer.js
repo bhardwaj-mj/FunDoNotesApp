@@ -15,6 +15,7 @@ import {fetchLabelData} from '../services/LabelServices';
 import {AuthContext} from '../navigation/AuthProvider';
 import {useSelector, useDispatch} from 'react-redux';
 import {labelsData} from '../redux/Action';
+import Languages from '../utility/localization/Languages';
 // class CustomDrawer extends Component {
 //   constructor(props) {
 //     super(props);
@@ -25,6 +26,7 @@ const CustomDrawer = ({props, navigation}) => {
   const {user} = useContext(AuthContext);
   const isFocused = useIsFocused();
   const labelData = useSelector(state => state.labelData);
+  const changeLang = useSelector(state => state.toggle);
   const dispatch = useDispatch();
   const fetchLabels = useCallback(async () => {
     let data = await fetchLabelData(user.uid);
@@ -39,13 +41,23 @@ const CustomDrawer = ({props, navigation}) => {
     <View style={styles.container}>
       <DrawerContentScrollView {...props} style={styles.drawer}>
         <View style={styles.logoView}>
-          <Text style={styles.logoText}>Fun Do Notes</Text>
+          <Text style={styles.logoText}>
+            {changeLang
+              ? Languages._props.hin.Fun_Do_Notes
+              : Languages._props.en.Fun_Do_Notes}
+          </Text>
         </View>
         <View>
           <DrawerItem
             onPress={() => navigation.navigate('Note')}
             icon={() => <Icon name="bulb-outline" size={25} color={'white'} />}
-            label={() => <Text style={styles.labelText}>Notes</Text>}
+            label={() => (
+              <Text style={styles.labelText}>
+                {changeLang
+                  ? Languages._props.hin.Notes
+                  : Languages._props.en.Notes}
+              </Text>
+            )}
           />
 
           <DrawerItem
@@ -53,7 +65,13 @@ const CustomDrawer = ({props, navigation}) => {
             icon={() => (
               <Icon name="notifications-outline" size={25} color={'white'} />
             )}
-            label={() => <Text style={styles.labelText}>Remainder</Text>}
+            label={() => (
+              <Text style={styles.labelText}>
+                {changeLang
+                  ? Languages._props.hin.Reminder
+                  : Languages._props.en.Reminder}
+              </Text>
+            )}
           />
 
           <View style={labelData.length ? styles.labelsContainer : styles.null}>
@@ -62,14 +80,18 @@ const CustomDrawer = ({props, navigation}) => {
                 style={labelData.length ? styles.labelsHeading : styles.null}>
                 <Text
                   style={labelData.length ? styles.labelsText : styles.null}>
-                  {labelData.length ? 'Labels' : ''}
+                  {changeLang
+                    ? Languages._props.hin.Labels
+                    : Languages._props.en.Labels}
                 </Text>
 
                 <TouchableOpacity
                   onPress={() => navigation.navigate('NewLabel')}>
                   <Text
                     style={labelData.length ? styles.labelsText : styles.null}>
-                    {labelData.length ? 'edit' : ''}
+                    {changeLang
+                      ? Languages._props.hin.Edit
+                      : Languages._props.en.Edit}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -102,7 +124,11 @@ const CustomDrawer = ({props, navigation}) => {
               onPress={() => navigation.navigate('NewLabel')}
               icon={() => <Icon name="add-outline" size={25} color={'white'} />}
               label={() => (
-                <Text style={styles.labelText}>Create new label</Text>
+                <Text style={styles.labelText}>
+                  {changeLang
+                    ? Languages._props.hin.Create_New_Label
+                    : Languages._props.en.Create_New_Label}
+                </Text>
               )}
             />
           </View>
@@ -112,24 +138,49 @@ const CustomDrawer = ({props, navigation}) => {
             icon={() => (
               <Icon name="archive-outline" size={25} color={'white'} />
             )}
-            label={() => <Text style={styles.labelText}>Archive</Text>}
+            label={() => (
+              <Text style={styles.labelText}>
+                {changeLang
+                  ? Languages._props.hin.Archive
+                  : Languages._props.en.Archive}
+              </Text>
+            )}
           />
           <DrawerItem
             onPress={() => navigation.navigate('Deleted')}
             icon={() => <Icon name="trash-outline" size={25} color={'white'} />}
-            label={() => <Text style={styles.labelText}>Deleted</Text>}
+            label={() => (
+              <Text style={styles.labelText}>
+                {changeLang
+                  ? Languages._props.hin.Deleted
+                  : Languages._props.en.Deleted}
+              </Text>
+            )}
           />
           <DrawerItem
+            onPress={() => navigation.navigate('Settings')}
             icon={() => (
               <Icon name="settings-outline" size={25} color={'white'} />
             )}
-            label={() => <Text style={styles.labelText}>Settings</Text>}
+            label={() => (
+              <Text style={styles.labelText}>
+                {changeLang
+                  ? Languages._props.hin.Settings
+                  : Languages._props.en.Settings}
+              </Text>
+            )}
           />
           <DrawerItem
             icon={() => (
               <EvilIconsGlyphs name="question" size={25} color={'white'} />
             )}
-            label={() => <Text style={styles.labelText}>Help & feedback</Text>}
+            label={() => (
+              <Text style={styles.labelText}>
+                {changeLang
+                  ? Languages._props.hin.Help_And_Feedback
+                  : Languages._props.en.Help_And_Feedback}
+              </Text>
+            )}
           />
         </View>
       </DrawerContentScrollView>

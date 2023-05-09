@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import {styles} from '../utility/GlobalStyle';
+import {pageStyles} from '../utility/GlobalStyle';
 import {AuthContext} from '../navigation/AuthProvider';
 
 const ForgotPassword = ({navigation}) => {
@@ -32,31 +32,35 @@ const ForgotPassword = ({navigation}) => {
   const onSubmit = () => {
     if (validate()) {
       forgotPassword(email);
+      // eslint-disable-next-line no-alert
       alert('Password reset link has been sent to your email');
     }
   };
   return (
-    <View style={styles.display}>
-      <View style={styles.topView}>
+    <View style={pageStyles.display}>
+      <View style={pageStyles.topView}>
         <View>
-          <Image source={require('../assets/logo.png')} style={styles.logo} />
+          <Image
+            source={require('../assets/logo.png')}
+            style={pageStyles.logo}
+          />
         </View>
-        <Text style={styles.titleText}>F U N D O N O T E S</Text>
+        <Text style={pageStyles.titleText}>F U N D O N O T E S</Text>
       </View>
-      <View style={styles.bottomView}>
+      <View style={pageStyles.bottomView}>
         <View>
           <ScrollView>
             <TextInput
               labelValue={email}
               onChangeText={userEmail => setEmail(userEmail)}
-              style={styles.textInput}
+              style={pageStyles.textInput}
               placeholder="Email"
             />
             <View>
               <Text style={{color: 'red', marginLeft: 20}}>{errors.mail}</Text>
             </View>
-            <TouchableOpacity style={styles.button} onPress={onSubmit}>
-              <Text style={styles.buttonText}>Submit</Text>
+            <TouchableOpacity style={pageStyles.button} onPress={onSubmit}>
+              <Text style={pageStyles.buttonText}>Submit</Text>
             </TouchableOpacity>
           </ScrollView>
         </View>

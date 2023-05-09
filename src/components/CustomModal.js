@@ -1,7 +1,10 @@
 import React from 'react';
 import {View, Text, Modal, TouchableOpacity, StyleSheet} from 'react-native';
 import {Avatar} from 'react-native-elements';
+import Languages from '../utility/localization/Languages';
+import {useSelector} from 'react-redux';
 const CustomModal = props => {
+  const changeLang = useSelector(state => state.toggle);
   return (
     <Modal
       animationType="slide"
@@ -23,7 +26,11 @@ const CustomModal = props => {
           <TouchableOpacity
             style={styles.logoutButton}
             onPress={props.onPressLogout}>
-            <Text style={styles.logoutText}>Logout</Text>
+            <Text style={styles.logoutText}>
+              {changeLang
+                ? Languages._props.hin.Logout
+                : Languages._props.en.Logout}
+            </Text>
           </TouchableOpacity>
         </TouchableOpacity>
       </View>

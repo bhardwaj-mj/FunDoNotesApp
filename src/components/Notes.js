@@ -4,12 +4,23 @@ import {AuthContext} from '../navigation/AuthProvider';
 import {fetchNoteData} from '../services/NoteServices';
 import {useIsFocused} from '@react-navigation/native';
 import NoteCard from './NoteCard';
+import {pageStyles} from '../utility/GlobalStyle';
+import {useSelector} from 'react-redux';
+import Languages from '../utility/localization/Languages';
+import {Color, Font, Margin} from '../utility/Theme';
 
 const Notes = ({navigation, layout}) => {
   const [otherNotes, setOtherNotes] = useState([]);
   const [pinnedNotes, setPinnedNotes] = useState([]);
   const {user} = useContext(AuthContext);
   const isFocused = useIsFocused();
+  const changeLang = useSelector(state => state.toggle);
+  const localizedPinned = changeLang
+    ? Languages._props.hin.Pinned
+    : Languages._props.en.Pinned;
+  const localizedOthers = changeLang
+    ? Languages._props.hin.Others
+    : Languages._props.en.Others;
 
   const getNotesData = useCallback(async () => {
     let notesData = await fetchNoteData(user.uid);
@@ -45,18 +56,18 @@ const Notes = ({navigation, layout}) => {
       <View>
         {pinnedNotes && (
           <Text style={styles.heading}>
-            {pinnedNotes.length ? 'Pinned' : null}
+            {pinnedNotes.length ? localizedPinned : ''}
           </Text>
         )}
         <FlatList
           numColumns={layout ? 2 : 1}
           key={layout ? 2 : 1}
-          style={styles.list}
+          style={pageStyles.list}
           data={pinnedNotes}
           ListFooterComponent={OthersFlatList}
           renderItem={({item}) => (
             <TouchableOpacity
-              style={layout ? styles.gridLayout : styles.listLayout}
+              style={layout ? pageStyles.gridLayout : pageStyles.listLayout}
               onPress={() => {
                 editNotes(item);
               }}>
@@ -70,14 +81,16 @@ const Notes = ({navigation, layout}) => {
   const OthersFlatList = () => {
     return (
       <View>
-        <Text style={styles.heading}>{pinnedNotes.length ? 'Others' : ''}</Text>
+        <Text style={styles.heading}>
+          {pinnedNotes.length ? localizedOthers : ''}
+        </Text>
         <FlatList
           numColumns={layout ? 2 : 1}
           key={layout ? 2 : 1}
           data={otherNotes}
           renderItem={({item}) => (
             <TouchableOpacity
-              style={layout ? styles.gridLayout : styles.listLayout}
+              style={layout ? pageStyles.gridLayout : pageStyles.listLayout}
               onPress={() => {
                 editNotes(item);
               }}>
@@ -100,35 +113,12 @@ const Notes = ({navigation, layout}) => {
   );
 };
 const styles = StyleSheet.create({
-  list: {
-    marginLeft: 10,
-    marginRight: 10,
-  },
-  listLayout: {
-    backgroundColor: 'white',
-    margin: 7,
-    borderColor: '#87ceeb',
-    borderWidth: 2,
-    borderRadius: 10,
-    padding: 10,
-    marginLeft: 10,
-    marginRight: 10,
-  },
-  gridLayout: {
-    backgroundColor: 'white',
-    margin: '2.5%',
-    borderColor: '#87ceeb',
-    borderWidth: 2,
-    borderRadius: 10,
-    padding: 10,
-    width: '45%',
-  },
   heading: {
-    color: '#87ceeb',
-    fontSize: 15,
+    color: Color.SECONDARY,
+    fontSize: Font.SECONDARY,
     fontWeight: 'bold',
-    marginLeft: 20,
-    marginTop: 15,
+    marginLeft: Margin.MARGIN_SEVEN,
+    marginTop: Margin.MARGIN_SIX,
   },
 });
 export default Notes;

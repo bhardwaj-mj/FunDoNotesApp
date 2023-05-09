@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
-import {styles} from '../utility/GlobalStyle';
+import {pageStyles} from '../utility/GlobalStyle';
 import {AuthContext} from '../navigation/AuthProvider';
 
 const Login = ({navigation}) => {
@@ -43,7 +43,7 @@ const Login = ({navigation}) => {
     setErrors(temp);
     return valid;
   };
-  const setErrorMeassage = error => {
+  const setErrorMessage = error => {
     const temp = {};
     if (error === 'auth/user-not-found') {
       temp.mail = 'User not found';
@@ -55,25 +55,28 @@ const Login = ({navigation}) => {
   };
   const onSubmit = () => {
     if (validate()) {
-      userLogin(email, password, setErrorMeassage);
+      userLogin(email, password, setErrorMessage);
     }
   };
 
   return (
-    <View style={styles.display}>
-      <View style={styles.topView}>
+    <View style={pageStyles.display}>
+      <View style={pageStyles.topView}>
         <View>
-          <Image source={require('../assets/logo.png')} style={styles.logo} />
+          <Image
+            source={require('../assets/logo.png')}
+            style={pageStyles.logo}
+          />
         </View>
-        <Text style={styles.titleText}>F U N D O N O T E S</Text>
+        <Text style={pageStyles.titleText}>F U N D O N O T E S</Text>
       </View>
-      <View style={styles.bottomView}>
+      <View style={pageStyles.bottomView}>
         <View>
           <ScrollView>
             <TextInput
               labelValue={email}
               onChangeText={userEmail => setEmail(userEmail)}
-              style={styles.textInput}
+              style={pageStyles.textInput}
               placeholder="Email"
             />
             <View>
@@ -82,32 +85,34 @@ const Login = ({navigation}) => {
             <TextInput
               labelValue={password}
               onChangeText={userPassword => setPassword(userPassword)}
-              style={styles.textInput}
+              style={pageStyles.textInput}
               placeholder="Password"
             />
             <View>
               <Text style={{color: 'red', marginLeft: 20}}>{errors.pass}</Text>
             </View>
             <TouchableOpacity
-              style={styles.TextButton}
+              style={pageStyles.TextButton}
               onPress={() => navigation.navigate('Forgot Password')}>
-              <Text style={styles.buttonText1}>Forgot Password?</Text>
+              <Text style={pageStyles.buttonText1}>Forgot Password?</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={() => onSubmit()}>
-              <Text style={styles.buttonText}>Sign In</Text>
+            <TouchableOpacity
+              style={pageStyles.button}
+              onPress={() => onSubmit()}>
+              <Text style={pageStyles.buttonText}>Sign In</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={styles.TextButton}
+              style={pageStyles.TextButton}
               onPress={() => navigation.navigate('Registration')}>
-              <Text style={styles.buttonText1}>
+              <Text style={pageStyles.buttonText1}>
                 Don't have an account? Sign up
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={styles.button}
+              style={pageStyles.button}
               onPress={() => googleLogin()}>
-              <Text style={styles.buttonText}>SignIn With Google</Text>
+              <Text style={pageStyles.buttonText}>SignIn With Google</Text>
             </TouchableOpacity>
           </ScrollView>
         </View>

@@ -1,12 +1,12 @@
 import React from 'react';
 import {Text, View, Image} from 'react-native';
 
-import {styles} from '../utility/GlobalStyle';
+import {pageStyles} from '../utility/GlobalStyle';
 
 const OpeningScreen = () => {
   return (
-    <View style={styles.openingScreen}>
-      <Image source={require('../assets/logo.png')} style={styles.logo} />
+    <View style={pageStyles.openingScreen}>
+      <Image source={require('../assets/logo.png')} style={pageStyles.logo} />
       <Text
         style={{
           fontSize: 35,

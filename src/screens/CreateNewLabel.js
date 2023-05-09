@@ -16,12 +16,14 @@ import {useIsFocused} from '@react-navigation/native';
 import {useSelector, useDispatch} from 'react-redux';
 import {labelsData} from '../redux/Action';
 import LabelCard from '../components/LabelsCard';
+import Languages from '../utility/localization/Languages';
 const CreateNewLabel = ({navigation}) => {
   const [label, setLabel] = useState('');
   const [icon, setIcon] = useState(false);
   const {user} = useContext(AuthContext);
   const isFocused = useIsFocused();
   const labelData = useSelector(state => state.labelData);
+  const changeLang = useSelector(state => state.toggle);
   const dispatch = useDispatch();
   const fetchLabels = useCallback(async () => {
     let data = await fetchLabelData(user.uid);
@@ -60,7 +62,9 @@ const CreateNewLabel = ({navigation}) => {
           <Ionicons name="arrow-back" size={25} color="#87ceeb" />
         </TouchableOpacity>
         <Text style={{color: '#87ceeb', fontSize: 18, marginLeft: 20}}>
-          Edit labels
+          {changeLang
+            ? Languages._props.hin.Edit_Labels
+            : Languages._props.en.Edit_Labels}
         </Text>
       </View>
       <View style={{marginTop: 15, flexDirection: 'row', alignItems: 'center'}}>
@@ -81,7 +85,11 @@ const CreateNewLabel = ({navigation}) => {
           }}
           value={label}
           onChangeText={text => onTextChange(text)}
-          placeholder="Create new label"
+          placeholder={
+            changeLang
+              ? Languages._props.hin.Create_New_Label
+              : Languages._props.en.Create_New_Label
+          }
           placeholderTextColor="#87ceeb"
         />
 

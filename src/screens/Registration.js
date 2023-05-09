@@ -7,7 +7,7 @@ import {
   ScrollView,
   Image,
 } from 'react-native';
-import {styles} from '../utility/GlobalStyle';
+import {pageStyles} from '../utility/GlobalStyle';
 import {AuthContext} from '../navigation/AuthProvider';
 const Registration = () => {
   const [fullName, setFullName] = useState('');
@@ -73,21 +73,24 @@ const Registration = () => {
   };
 
   return (
-    <View style={styles.display}>
-      <View style={styles.topView}>
+    <View style={pageStyles.display}>
+      <View style={pageStyles.topView}>
         <View>
-          <Image source={require('../assets/logo.png')} style={styles.logo} />
+          <Image
+            source={require('../assets/logo.png')}
+            style={pageStyles.logo}
+          />
         </View>
-        <Text style={styles.titleText}>F U N D O N O T E S</Text>
+        <Text style={pageStyles.titleText}>F U N D O N O T E S</Text>
       </View>
-      <View style={styles.bottomView}>
+      <View style={pageStyles.bottomView}>
         <View>
           <ScrollView>
             <Text>Create Account{'\n'}Signup to get started!</Text>
             <TextInput
               labelValue={fullName}
               onChangeText={userFullName => setFullName(userFullName)}
-              style={styles.textInput}
+              style={pageStyles.textInput}
               placeholder="Full Name"
             />
             <View>
@@ -96,14 +99,14 @@ const Registration = () => {
             <TextInput
               labelValue={email}
               onChangeText={userEmail => setEmail(userEmail)}
-              style={styles.textInput}
+              style={pageStyles.textInput}
               placeholder="Email"
             />
             <View>
               <Text style={{color: 'red', marginLeft: 20}}>{errors.mail}</Text>
             </View>
             <TextInput
-              style={styles.textInput}
+              style={pageStyles.textInput}
               labelValue={password}
               onChangeText={userPassword => setPassword(userPassword)}
               placeholder="Password"
@@ -114,7 +117,7 @@ const Registration = () => {
             <TextInput
               labelValue={confirmPassword}
               onChangeText={userPassword => setConfirmPassword(userPassword)}
-              style={styles.textInput}
+              style={pageStyles.textInput}
               placeholder="Confirm Password"
             />
             <View>
@@ -122,11 +125,15 @@ const Registration = () => {
                 {errors.confirm}
               </Text>
             </View>
-            <TouchableOpacity style={styles.button} onPress={() => onSubmit()}>
-              <Text style={styles.buttonText}>Sign Up</Text>
+            <TouchableOpacity
+              style={pageStyles.button}
+              onPress={() => onSubmit()}>
+              <Text style={pageStyles.buttonText}>Sign Up</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.TextButton}>
-              <Text style={styles.buttonText1}>If already a user, Sign In</Text>
+            <TouchableOpacity style={pageStyles.TextButton}>
+              <Text style={pageStyles.buttonText1}>
+                If already a user, Sign In
+              </Text>
             </TouchableOpacity>
           </ScrollView>
         </View>

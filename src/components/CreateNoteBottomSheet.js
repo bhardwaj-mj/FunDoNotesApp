@@ -3,7 +3,10 @@ import {Text, View, TouchableOpacity, Modal, StyleSheet} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Languages from '../utility/localization/Languages';
+import {useSelector} from 'react-redux';
 const CreateNoteBottomSheet = props => {
+  const changeLang = useSelector(state => state.toggle);
   return (
     <View>
       <Modal
@@ -25,7 +28,11 @@ const CreateNoteBottomSheet = props => {
                 size={20}
                 color="white"
               />
-              <Text style={styles.text}>Delete</Text>
+              <Text style={styles.text}>
+                {changeLang
+                  ? Languages._props.hin.Delete
+                  : Languages._props.en.Delete}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.modalBtn}>
               <MaterialCommunityIcons
@@ -33,7 +40,11 @@ const CreateNoteBottomSheet = props => {
                 size={20}
                 color="white"
               />
-              <Text style={styles.text}>Make a copy</Text>
+              <Text style={styles.text}>
+                {changeLang
+                  ? Languages._props.hin.Make_A_Copy
+                  : Languages._props.en.Make_A_Copy}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.modalBtn}>
               <MaterialCommunityIcons
@@ -41,11 +52,19 @@ const CreateNoteBottomSheet = props => {
                 size={20}
                 color="white"
               />
-              <Text style={styles.text}>Send</Text>
+              <Text style={styles.text}>
+                {changeLang
+                  ? Languages._props.hin.Send
+                  : Languages._props.en.Send}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.modalBtn}>
               <Feather name="user-plus" size={20} color="white" />
-              <Text style={styles.text}>Collaborator</Text>
+              <Text style={styles.text}>
+                {changeLang
+                  ? Languages._props.hin.Collaborator
+                  : Languages._props.en.Collaborator}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.modalBtn}
@@ -55,11 +74,19 @@ const CreateNoteBottomSheet = props => {
                 size={20}
                 color="white"
               />
-              <Text style={styles.text}>Labels</Text>
+              <Text style={styles.text}>
+                {changeLang
+                  ? Languages._props.hin.Labels
+                  : Languages._props.en.Labels}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.modalBtn}>
               <MaterialIcons name="help-outline" size={20} color="white" />
-              <Text style={styles.text}>Help & feedback</Text>
+              <Text style={styles.text}>
+                {changeLang
+                  ? Languages._props.hin.Help_And_Feedback
+                  : Languages._props.en.Help_And_Feedback}
+              </Text>
             </TouchableOpacity>
           </View>
         </TouchableOpacity>

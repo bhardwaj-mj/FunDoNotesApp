@@ -9,12 +9,14 @@ import {useIsFocused} from '@react-navigation/native';
 import NoteCard from '../components/NoteCard';
 import {layoutChange} from '../redux/Action';
 import {useSelector, useDispatch} from 'react-redux';
-
+import {pageStyles} from '../utility/GlobalStyle';
+import Languages from '../utility/localization/Languages';
 const Archive = ({navigation}) => {
   const {user} = useContext(AuthContext);
   const [notes, setNotes] = useState([]);
   const isFocused = useIsFocused();
   const layout = useSelector(state => state.layout);
+  const changeLang = useSelector(state => state.toggle);
   const dispatch = useDispatch();
 
   const archiveNotes = useCallback(async () => {
@@ -59,7 +61,11 @@ const Archive = ({navigation}) => {
             </TouchableOpacity>
           </View>
           <View>
-            <Text style={styles.archiveText}>Archive</Text>
+            <Text style={styles.archiveText}>
+              {changeLang
+                ? Languages._props.hin.Archive
+                : Languages._props.en.Archive}
+            </Text>
           </View>
           <View>
             <TouchableOpacity style={styles.searchButton}>
@@ -80,13 +86,13 @@ const Archive = ({navigation}) => {
       <View>
         <View>
           <FlatList
-            style={styles.list}
+            style={pageStyles.list}
             data={notes}
             numColumns={layout ? 2 : 1}
             key={layout ? 2 : 1}
             renderItem={({item}) => (
               <TouchableOpacity
-                style={layout ? styles.gridLayout : styles.listLayout}
+                style={layout ? pageStyles.gridLayout : pageStyles.listLayout}
                 onPress={() => {
                   editNotes(item);
                 }}>
@@ -128,30 +134,6 @@ const styles = StyleSheet.create({
   searchButton: {
     paddingRight: 20,
     paddingLeft: 20,
-  },
-  list: {
-    paddingLeft: 10,
-    paddingRight: 10,
-  },
-
-  listLayout: {
-    backgroundColor: 'white',
-    margin: 7,
-    borderColor: '#87ceeb',
-    borderWidth: 2,
-    borderRadius: 10,
-    padding: 10,
-    marginLeft: 10,
-    marginRight: 10,
-  },
-  gridLayout: {
-    backgroundColor: 'white',
-    margin: '2.5%',
-    borderColor: '#87ceeb',
-    borderWidth: 2,
-    borderRadius: 10,
-    padding: 10,
-    width: '45%',
   },
 });
 export default Archive;

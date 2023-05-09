@@ -1,35 +1,35 @@
 import {StyleSheet} from 'react-native';
-import {Color, Padding, Border, Font} from './Theme';
+import {Color, Padding, Border, Font, Flex} from './Theme';
 
-export const styles = StyleSheet.create({
+export const pageStyles = StyleSheet.create({
   openingScreen: {
-    flex: 1,
+    flex: Flex.ONE,
     backgroundColor: Color.PRIMARY,
     justifyContent: 'center',
   },
   display: {
-    flex: 1,
+    flex: Flex.ONE,
     backgroundColor: Color.PRIMARY,
   },
   topView: {
-    flex: 1,
+    flex: Flex.ONE,
     justifyContent: 'flex-start',
-    paddingHorizontal: Padding.PRIMARY_PADDING,
-    paddingBottom: Padding.BOTTOM_PADDING,
+    paddingHorizontal: Padding.PADDING_SIX,
+    paddingBottom: Padding.PADDING_TWELVE,
   },
   titleText: {
-    fontSize: 35,
+    fontSize: Font.EXTRA_LARGE,
     color: Color.HEADING,
     fontWeight: 'bold',
     marginLeft: 40,
     marginTop: 10,
   },
   bottomView: {
-    flex: 3,
-    backgroundColor: 'black',
+    flex: Flex.THREE,
+    backgroundColor: Color.HEADING,
     borderTopLeftRadius: Border.ROUND_CORNER,
     borderTopRightRadius: Border.ROUND_CORNER,
-    paddingHorizontal: Padding.PRIMARY_PADDING,
+    paddingHorizontal: Padding.PADDING_SIX,
     paddingVertical: 100,
     flexShrink: 0,
   },
@@ -40,9 +40,9 @@ export const styles = StyleSheet.create({
     backgroundColor: Color.PLACE_HOLDER_COLOR,
     borderColor: Color.HEADING,
     borderRadius: Border.BORDER_RADIUS,
-    paddingLeft: Padding.INITIAL_PADDING,
-    marginTop: Padding.PRIMARY_PADDING,
-    marginLeft: Padding.INITIAL_PADDING,
+    paddingLeft: Padding.PADDING_FIVE,
+    marginTop: Padding.PADDING_SIX,
+    marginLeft: Padding.PADDING_FIVE,
   },
   buttonText: {
     color: Color.HEADING,
@@ -58,7 +58,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: Padding.PRIMARY_PADDING,
+    marginTop: Padding.PADDING_SIX,
   },
   button: {
     width: '90%',
@@ -66,15 +66,38 @@ export const styles = StyleSheet.create({
     height: 52,
     backgroundColor: Color.PRIMARY,
     borderRadius: Border.BUTTON_BORDER,
-    marginTop: Padding.PRIMARY_PADDING,
+    marginTop: Padding.PADDING_SIX,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: Padding.INITIAL_PADDING,
+    marginLeft: Padding.PADDING_FIVE,
   },
   logo: {
     height: 100,
     width: 100,
     marginLeft: 120,
+  },
+  list: {
+    marginLeft: 10,
+    marginRight: 10,
+  },
+  listLayout: {
+    backgroundColor: Color.PRIMARY,
+    margin: 7,
+    borderColor: Color.SECONDARY,
+    borderWidth: 2,
+    borderRadius: 10,
+    padding: 10,
+    marginLeft: 10,
+    marginRight: 10,
+  },
+  gridLayout: {
+    backgroundColor: Color.PRIMARY,
+    margin: '2.5%',
+    borderColor: Color.SECONDARY,
+    borderWidth: 2,
+    borderRadius: 10,
+    padding: 10,
+    width: '45%',
   },
 });
