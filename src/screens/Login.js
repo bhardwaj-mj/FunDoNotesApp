@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {pageStyles} from '../utility/GlobalStyle';
 import {AuthContext} from '../navigation/AuthProvider';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const Login = ({navigation}) => {
   const [email, setEmail] = useState();
@@ -82,12 +83,15 @@ const Login = ({navigation}) => {
             <View>
               <Text style={{color: 'red', marginLeft: 20}}>{errors.mail}</Text>
             </View>
+
             <TextInput
               labelValue={password}
               onChangeText={userPassword => setPassword(userPassword)}
               style={pageStyles.textInput}
               placeholder="Password"
+              secureTextEntry={true}
             />
+
             <View>
               <Text style={{color: 'red', marginLeft: 20}}>{errors.pass}</Text>
             </View>

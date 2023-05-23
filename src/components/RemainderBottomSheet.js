@@ -6,6 +6,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import RNDateTimePicker from '@react-native-community/datetimepicker';
 import Languages from '../utility/localization/Languages';
 import {useSelector} from 'react-redux';
+import {Color, Flex, Font, Margin, Padding} from '../utility/Theme';
 
 const RemainderBottomSheet = ({
   remainderBottomSheetVisible,
@@ -141,34 +142,34 @@ const RemainderBottomSheet = ({
 
 const styles = StyleSheet.create({
   modal_container: {
-    flex: 1,
+    flex: Flex.ONE,
     justifyContent: 'center',
-    backgroundColor: '#87ceeb',
+    backgroundColor: Color.SECONDARY,
     flexDirection: 'column',
   },
   modalBtn: {
-    backgroundColor: '#87ceeb',
+    backgroundColor: Color.SECONDARY,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    padding: 10,
+    padding: Padding.PADDING_FOUR,
     flexDirection: 'row',
   },
   button: {
-    flex: 1,
+    flex: Flex.ONE,
     flexDirection: 'row',
     alignItems: 'flex-end',
-    backgroundColor: '#000000aa',
+    backgroundColor: Color.TINT,
   },
   text: {
-    marginLeft: 20,
-    color: 'white',
-    fontSize: 15,
+    marginLeft: Margin.MARGIN_SEVEN,
+    color: Color.PRIMARY,
+    fontSize: Font.SECONDARY,
     width: '63%',
   },
   timeText: {
     marginLeft: 'auto',
-    color: 'white',
-    fontSize: 15,
+    color: Color.PRIMARY,
+    fontSize: Font.SECONDARY,
   },
 });
 export default RemainderBottomSheet;

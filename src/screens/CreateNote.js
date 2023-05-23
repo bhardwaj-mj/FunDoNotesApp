@@ -145,6 +145,7 @@ const CreateNote = ({navigation, route}) => {
           <TouchableOpacity
             onPress={() => {
               setArchived(!archived);
+              //navigation.navigate('Note');
             }}>
             <MaterialCommunityIcons
               name="archive-arrow-down-outline"
@@ -264,7 +265,10 @@ const CreateNote = ({navigation, route}) => {
             visible={bottomSheetVisible}
             onRequestClose={() => setBottomSheetVisible(false)}
             hideModal={() => setBottomSheetVisible(false)}
-            onPressDelete={() => setDeleted(!deleted)}
+            onPressDelete={() => {
+              setDeleted(!deleted);
+              //navigation.navigate('Note');
+            }}
             labelPress={() =>
               navigation.navigate('AddLabelsToNote', {
                 noteId: obtainedID,

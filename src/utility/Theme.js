@@ -4,6 +4,7 @@ export const Color = {
   PLACE_HOLDER_COLOR: '#808080',
   LINK: '#1e90ff',
   SECONDARY: '#87ceeb',
+  TINT: '#000000aa',
 };
 export const Padding = {
   PADDING_ONE: 5,
@@ -39,9 +40,12 @@ export const Icon = {
   SIZE_ONE: 15,
   SIZE_TWO: 20,
   SIZE_THREE: 25,
+  SIZE_FOUR: 40,
 };
 export const BorderRadius = {
   RADIUS_ONE: 30,
+  RADIUS_TWO: 15,
+  RADIUS_THREE: 20,
 };
 export const Border = {
   BORDER_RADIUS: 10,
@@ -53,6 +57,8 @@ export const Font = {
   SECONDARY: 15,
   LARGE: 25,
   EXTRA_LARGE: 35,
+  MEDIUM: 18,
+  SMALL: 13,
 };
 export const Flex = {
   ONE: 1,

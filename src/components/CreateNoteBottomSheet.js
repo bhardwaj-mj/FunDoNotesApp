@@ -5,6 +5,7 @@ import Feather from 'react-native-vector-icons/Feather';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Languages from '../utility/localization/Languages';
 import {useSelector} from 'react-redux';
+import {Color, Flex, Font, Icon, Margin, Padding} from '../utility/Theme';
 const CreateNoteBottomSheet = props => {
   const changeLang = useSelector(state => state.toggle);
   return (
@@ -25,8 +26,8 @@ const CreateNoteBottomSheet = props => {
               onPress={props.onPressDelete}>
               <MaterialCommunityIcons
                 name="trash-can-outline"
-                size={20}
-                color="white"
+                size={Icon.SIZE_TWO}
+                color={Color.PRIMARY}
               />
               <Text style={styles.text}>
                 {changeLang
@@ -37,8 +38,8 @@ const CreateNoteBottomSheet = props => {
             <TouchableOpacity style={styles.modalBtn}>
               <MaterialCommunityIcons
                 name="content-copy"
-                size={20}
-                color="white"
+                size={Icon.SIZE_TWO}
+                color={Color.PRIMARY}
               />
               <Text style={styles.text}>
                 {changeLang
@@ -49,8 +50,8 @@ const CreateNoteBottomSheet = props => {
             <TouchableOpacity style={styles.modalBtn}>
               <MaterialCommunityIcons
                 name="share-variant-outline"
-                size={20}
-                color="white"
+                size={Icon.SIZE_TWO}
+                color={Color.PRIMARY}
               />
               <Text style={styles.text}>
                 {changeLang
@@ -59,7 +60,11 @@ const CreateNoteBottomSheet = props => {
               </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.modalBtn}>
-              <Feather name="user-plus" size={20} color="white" />
+              <Feather
+                name="user-plus"
+                size={Icon.SIZE_TWO}
+                color={Color.PRIMARY}
+              />
               <Text style={styles.text}>
                 {changeLang
                   ? Languages._props.hin.Collaborator
@@ -71,8 +76,8 @@ const CreateNoteBottomSheet = props => {
               onPress={() => props.labelPress()}>
               <MaterialCommunityIcons
                 name="label-outline"
-                size={20}
-                color="white"
+                size={Icon.SIZE_TWO}
+                color={Color.PRIMARY}
               />
               <Text style={styles.text}>
                 {changeLang
@@ -81,7 +86,11 @@ const CreateNoteBottomSheet = props => {
               </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.modalBtn}>
-              <MaterialIcons name="help-outline" size={20} color="white" />
+              <MaterialIcons
+                name="help-outline"
+                size={Icon.SIZE_TWO}
+                color={Color.PRIMARY}
+              />
               <Text style={styles.text}>
                 {changeLang
                   ? Languages._props.hin.Help_And_Feedback
@@ -97,27 +106,27 @@ const CreateNoteBottomSheet = props => {
 
 const styles = StyleSheet.create({
   modal_container: {
-    flex: 1,
+    flex: Flex.ONE,
     justifyContent: 'center',
-    backgroundColor: '#87ceeb',
+    backgroundColor: Color.SECONDARY,
     flexDirection: 'column',
   },
   modalBtn: {
-    backgroundColor: '#87ceeb',
+    backgroundColor: Color.SECONDARY,
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
-    padding: 10,
+    padding: Padding.PADDING_FOUR,
     flexDirection: 'row',
   },
   button: {
-    flex: 1,
+    flex: Flex.ONE,
     flexDirection: 'row',
     alignItems: 'flex-end',
   },
   text: {
-    marginLeft: 20,
-    color: 'white',
-    fontSize: 13,
+    marginLeft: Margin.MARGIN_SEVEN,
+    color: Color.PRIMARY,
+    fontSize: Font.SMALL,
   },
 });
 export default CreateNoteBottomSheet;

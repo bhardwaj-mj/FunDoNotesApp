@@ -110,6 +110,7 @@ const Registration = () => {
               labelValue={password}
               onChangeText={userPassword => setPassword(userPassword)}
               placeholder="Password"
+              secureTextEntry={true}
             />
             <View>
               <Text style={{color: 'red', marginLeft: 20}}>{errors.pass}</Text>
